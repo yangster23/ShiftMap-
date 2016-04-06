@@ -1,19 +1,21 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
+Groups = new Mongo.Collection('Groups');
+
 //import './shiftmap.html';
 
-Router.route('/', function () {
-  this.render('home');
+Router.configure({
+  layoutTemplate: 'Layout',
+  //waitOn: function() { return Meteor.subscribe("Stuff"); },
 });
-Router.route('/login', function () {
-  this.render('login');
-})
+
+Router.route('/', function () {
+  this.render('Home');
+});
 Router.route('/calendar', function () {
   this.render('calendar');
 })
-
-Groups = new Mongo.Collection('Groups');
 
 //each group is one document
 
@@ -28,14 +30,17 @@ Groups = new Mongo.Collection('Groups');
   {day: "sat", shift: []}]
 });*/
 
-//tempId = Coll.insert({counter: 0 }, {hello: 1}), ;
 tempid = '';
 if (Meteor.isClient) {
   Template.calendar.helpers({
       getDays : function () {
         group = Groups.findOne();
-        tempid = group._id;
-        return group.days;
+        console.log(group)
+        console.log(Groups.find().count())
+        if (group) {
+          tempid = group._id;
+          return group.days;
+        }
     }
   });
 
@@ -49,6 +54,56 @@ if (Meteor.isClient) {
       }
     
   });
+
+  Template.calendar.events({
+    'click button' : function (event) {
+      id = event.currentTarget.id;
+      console.log(id);
+      if (id == "erase") Groups.remove(tempid);
+      if (id == "add") {
+        tempid = Groups.insert({start: 9, end: 17, admin: 'hello', 
+          days: [
+          {day: "sun", shift: [{day: "sun", startS: 10, endS: 11, names: [], max: "10"}, {day: "sun", startS: 11, endS: 12, names: [], max: "10"}, {day: "sun", startS: 13, endS: 14, names: [], max: "10"}]},
+          {day: "mon", shift: []},
+          {day: "tue", shift: []},
+          {day: "wed", shift: []},
+          {day: "thu", shift: []},
+          {day: "fri", shift: []},
+          {day: "sat", shift: []}]
+        });
+      }
+    }
+  });
+
+  Template.CasLogin.events({
+
+  /**
+   * Handle the click on the logout link.
+   * @param e The click event.
+   * @returns {boolean} False.
+   */
+  'click .cas-logout': function(e) {
+    e.preventDefault();
+    Meteor.logout();
+    return false;
+  },
+
+  /**
+   * Handle the click on the login link.
+   * @param e The click event.
+   * @returns {boolean} False.
+   */
+  'click .cas-login': function(e) {
+    e.preventDefault();
+    var callback = function loginCallback(error){
+      if (error) {
+        console.log(error);
+      }
+    };
+    Meteor.loginWithCas([callback]);
+    return false;
+  }
+});
 
   Template.setDay.events({
     'click button' : function (event) {
@@ -79,8 +134,19 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
+
+  Groups.allow({
+    'update': function() {
+      return true;
+    },
+    'insert': function() {
+      return true;
+    },
+    'remove': function() {
+      return true;
+    }
+  })
   Meteor.startup(function () {
     // code to run on server at startup
-
   });
 }
