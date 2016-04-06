@@ -1,0 +1,53 @@
+<head>
+  <title>ShiftMap</title>
+</head>
+
+<template name = "calendar">
+
+  <style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+  </style>
+
+  <h1> Shift Map </h1>
+  <h2> Student Employment Shift Manager </h2>
+
+    <table style="width:100%">
+      {{#each getDays}}
+        <td>{{>setDay}}</td>
+      {{/each}}
+    </table>
+
+</template>
+
+<template name = "home">
+  <div class = "container">
+    <h1 id="header1">ShiftMap</h1>
+    {{loginButtons}}
+    <h2 id="header2"><a href="/calendar" >login</a></h2>
+    <h3 id="header3"> The time for those annoying emails to request a shift has ended</h3> 
+  </div>   
+</template>
+
+<template name = "login">
+  <p> This is a sample login page to see if routing works </p>
+</template>
+
+
+  <!-- Retrieve the group and its start, end, and admin --> 
+
+<template name="setDay">
+  <th>{{day}}</th> 
+    {{#each shift}}
+      <button style={{mapShift startS endS names}} id={{day}}{{startS}}{{endS}}>
+        {{startS}} - {{endS}}
+      </button>
+    {{/each}}
+</template>
+
+  

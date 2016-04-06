@@ -1,0 +1,19 @@
+
+{
+  "cas": {
+    "baseUrl": "https://fed.princeton.edu/cas/", 
+    "autoClose": true
+  },
+  "public": {
+    "cas": {
+      "loginUrl": "https://fed.princeton.edu/cas/login",
+      "serviceParam": "service",
+      "popupWidth": 810,
+      "popupHeight": 610
+    }
+  },
+  "allowed_users": [
+    "jjy",
+    "sangkim"
+  ]
+}

@@ -1,0 +1,35 @@
+/* CSS declarations go here */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100%;
+  background-image: linear-gradient(to bottom, #d0edf5, #e1e5f0 100%);
+}
+
+.header1 {
+	font-family: sans-serif;
+  font-size: 2em;
+  text-align: center;
+  display: block;
+}
+
+.header2 {
+	left: 0;
+	line-height: 20px;
+	margin-top: -100px;
+	position: absolute;
+	text-align: center; 
+	top: 25%;
+	width: 100%;
+	display: inline-block;
+}
+.header3 {
+	left: 0;
+	line-height: 20px;
+	margin-top: -100px;
+	position: absolute;
+	text-align: center; 
+	top: 30%;
+	width: 100%;
+	display: inline-block;
+}
