@@ -18,22 +18,26 @@ Router.route('/', function () {
 Router.route('/calendar', function () {
   this.render('calendar');
 })
+function currentUser() {
+  return Meteor.user().profile.name;
+}
 
-//each group is one document
+function idFromName(netid) {
+  user = Users.findOne({username: netid});
+  return user._id;
+}
 
-/*tempId = Groups.insert({start: 9, end: 17, admin: 'hello', 
-  days: [
-  {day: "sun", shift: [{day: "sun", startS: 10, endS: 11, names: [], max: "10"}, {day: "sun", startS: 11, endS: 12, names: [], max: "10"}, {day: "sun", startS: 13, endS: 14, names: [], max: "10"}]},
-  {day: "mon", shift: []},
-  {day: "tue", shift: []},
-  {day: "wed", shift: []},
-  {day: "thu", shift: []},
-  {day: "fri", shift: []},
-  {day: "sat", shift: []}]
-});*/
+function indexUser(userid, users) {
+  for (i = 0; i < users.length; ++i) {
+    if (users[i].userid == userid) {
+      return i;
+    }
+  }
+  return -1;
+}
 
 // adds cgroupid from the user with userid if it is not there, removes otherwise
-/*function changeGroup(userid, cgroupid) {
+function changeGroup(userid, cgroupid) {
   user = Users.findOne({_id: userid});
   newgroups = user.groups;
   for (i = 0; i < newgroups.length; ++i) {
@@ -48,19 +52,31 @@ Router.route('/calendar', function () {
 }
 
 // adds cuserid from the group with groupid if it is not there, removes otherwise
-function changeUser(cuserid, groupid) {
+function changeUserInGroup(cuserid, groupid) {
   group = Groups.findOne({_id: groupid});
   newusers = group.users;
-  for (i = 0; i < newusers.length; ++i) {
-    if (newusers[i].userid == cnetid) {
-      newusers.splice(i,1);
-      Groups.update({_id: groupid}, {$set: {users: newusers}}});
-      return;
-    }
+  i = indexUser(cuserid, newusers);
+  if (i >= 0) {
+    newusers.splice(i,1);
+  } else {
+    newusers.push({userid: cuserid});
   }
-  newusers.push({userid: cuserid});
   Groups.update({_id: groupid}, {$set: {users: newusers}});
-}*/
+}
+
+
+function changeUserInShift(cuserid, shiftid) {
+  shift = Shifts.findOne({_id: shiftid});
+  newusers = shift.users;
+  i = indexUser(cuserid, newusers);
+  console.log(i);
+  if (i >= 0){
+    newusers.splice(i,1);
+  } else {
+    newusers.push({userid: cuserid});
+  }
+  Shifts.update({_id: shiftid}, {$set: {users: newusers}});
+}
 
 tempid = '';
 if (Meteor.isClient) {
@@ -69,16 +85,15 @@ if (Meteor.isClient) {
   Template.Header.helpers({
     getGroups : function (netid) {
       user = Users.findOne({username: netid});
-      //console.log(user);
+      // console.log(user);
       if (user == undefined) {
         Users.insert({username: netid, groups:[]});
         return [];
       }
-      console.log(netid + ' added');
+      // console.log(netid + ' added');
       return user.groups;
     },
     getGroupName : function (groupid) {
-     
       return Groups.findOne({_id: groupid}).groupname;
     }
   });
@@ -86,9 +101,9 @@ if (Meteor.isClient) {
   Template.Header.events({
     'click .groupElement' : function (event) {
       id = event.currentTarget.id;
-      console.log(this.groupid);
+      // console.log(this.groupid);
       // TODO: Changes current calendar to the group with _id id.
-      Users.update({username: currentUser.profile.name}, {$set: {current: this.groupid}});
+      Users.update({username: currentUser()}, {$set: {current: id}});
     },
     'click .newGroup' : function (event) {
       // TODO: Something that adds a group, with this person as admin.
@@ -105,13 +120,22 @@ if (Meteor.isClient) {
         return group.days;
       }
     },*/
+
+    // retrieve the current group's shifts in an array for the week
     getDays : function () {
+      user = Users.findOne({username: currentUser()});
+      current = user.current;
+
+      if (current == undefined) {
+        ; // TODO: if the user has no predefined current group
+      }
+
       today = new Date();
       currdayofweek = today.getDay();
       firstday = today.getDate() - currdayofweek;
       days = [];
       for (i = 0; i < 7; ++i) {
-        days[i] = {oneday : Shifts.find({day: i+firstday})};
+        days[i] = {oneday : Shifts.find({groupid: current, day: i+firstday})};
       }
       
       return days;
@@ -119,17 +143,21 @@ if (Meteor.isClient) {
   });
 
   Template.setDay.helpers({
-    mapShift : function (start, end, names) {
+    mapShift : function (start, end, users) {
+      id = idFromName(currentUser());
+      if (indexUser(id, users) >= 0) {
+        colVal = "red"
+      } else {
+        colVal = "blue"
+      }
       height = 100;
       width = "100";
-      if (names.length >= 1) colVal = "red";
-      else colVal = "blue";
       return "style=\"color: " + colVal + ";height:" + height + "px;width:" + width + "px\"";
     }
     
   });
 
-  Template.calendar.events({
+  /*Template.calendar.events({
     'click button' : function (event) {
       id = event.currentTarget.id;
       console.log(id);
@@ -147,7 +175,7 @@ if (Meteor.isClient) {
         });
       }
     }
-  });
+  }); */
 
   Template.CasLogin.events({
 
@@ -184,6 +212,11 @@ if (Meteor.isClient) {
     'click button' : function (event) {
 
       id = event.currentTarget.id;
+      userid = idFromName(currentUser());
+      changeUserInShift(userid, id);
+      /* shift = Shifts.findOne({_id: id})
+
+
       dayArray = Groups.findOne().days;
       startTime = id.slice(3,5);
       endTime = id.slice(5,7);
@@ -202,8 +235,10 @@ if (Meteor.isClient) {
             }
           }
         }
-      }
-      Groups.update(tempid,{$set: {days: [{days:"sun", shift: array}, dayArray[1], dayArray[2], dayArray[3], dayArray[4], dayArray[5], dayArray[6]]}});
+      }*/
+      
+
+
     }
   });
 }
@@ -221,7 +256,7 @@ if (Meteor.isServer) {
     'remove': function() {
       return true;
     }
-  })
+  });
 
 
   Meteor.startup(function () {

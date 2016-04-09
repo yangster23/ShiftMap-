@@ -88,22 +88,10 @@
   {{/if}}
 </template>
 
-
-  <!-- Retrieve the group and its start, end, and admin --> 
-<!--
+<!-- Retrieve the group and its start, end, and admin --> 
 <template name="setDay">
-  <th>{{day}}</th> 
-    {{#each shift}}
-      <button style={{mapShift startS endS names}} id={{day}}{{startS}}{{endS}}>
-        {{startS}} - {{endS}}
-      </button>
-    {{/each}}
-</template>
--->
-
-<template name="setDay">
-  {{#each aday}}
-    <button style={{mapShift start end names}} id ={{day}}{{start}}{{end}}>
+  {{#each oneday}}
+    <button style={{mapShift start end users currentUser.profile.name}} id={{_id}} a={{currentUser.profile.name}}>
       {{start}} - {{end}}
     </button>
   {{/each}}
