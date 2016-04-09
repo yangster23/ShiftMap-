@@ -23,7 +23,7 @@
 
   <table style="width:100%">
       {{#each getDays}}
-        <td>{{>setDay}}</td>
+        <tr>{{>setDay}}</tr>
       {{/each}}
   </table>
     
@@ -53,8 +53,12 @@
 
         <ul class="nav navbar-nav navbar-right">
           {{#if currentUser}}
+            {{#each getGroups currentUser.profile.name}}
+              <li><a class="groupElement" id={{ groupid }}>{{getGroupName groupid}}</a></li>
             <!--<li><a href="{{ pathFor 'AddStuff' }}">Add Stuff</a></li>
             <li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
+            {{/each}}
+            <li><a class="newGroup" id={{ currentUser.profile.name }}>Text goes here</a></li>
           {{/if}} 
           {{> CasLogin }}
         </ul>
@@ -86,7 +90,7 @@
 
 
   <!-- Retrieve the group and its start, end, and admin --> 
-
+<!--
 <template name="setDay">
   <th>{{day}}</th> 
     {{#each shift}}
@@ -94,4 +98,13 @@
         {{startS}} - {{endS}}
       </button>
     {{/each}}
+</template>
+-->
+
+<template name="setDay">
+  {{#each aday}}
+    <button style={{mapShift start end names}} id ={{day}}{{start}}{{end}}>
+      {{start}} - {{end}}
+    </button>
+  {{/each}}
 </template>

@@ -1,7 +1,9 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
+Users = new Mongo.Collection('Users');
 Groups = new Mongo.Collection('Groups');
+Shifts = new Mongo.Collection('Shifts');
 
 //import './shiftmap.html';
 
@@ -30,28 +32,100 @@ Router.route('/calendar', function () {
   {day: "sat", shift: []}]
 });*/
 
+// adds cgroupid from the user with userid if it is not there, removes otherwise
+/*function changeGroup(userid, cgroupid) {
+  user = Users.findOne({_id: userid});
+  newgroups = user.groups;
+  for (i = 0; i < newgroups.length; ++i) {
+    if (newgroups[i].groupid == cgroupid) {
+      newgroups.splice(i, 1);
+      Users.update({_id: userid}, {$set: {groups: newgroups}});
+      return;
+    }
+  }
+  newgroups.push({groupid: cgroupid});
+  Users.update({_id: netid}, {$set: {groups: newgroups}});
+}
+
+// adds cuserid from the group with groupid if it is not there, removes otherwise
+function changeUser(cuserid, groupid) {
+  group = Groups.findOne({_id: groupid});
+  newusers = group.users;
+  for (i = 0; i < newusers.length; ++i) {
+    if (newusers[i].userid == cnetid) {
+      newusers.splice(i,1);
+      Groups.update({_id: groupid}, {$set: {users: newusers}}});
+      return;
+    }
+  }
+  newusers.push({userid: cuserid});
+  Groups.update({_id: groupid}, {$set: {users: newusers}});
+}*/
+
 tempid = '';
 if (Meteor.isClient) {
+ // Session.set('currentGroup',Users.findOne({currentUser.profile.name));// TODO
+
+  Template.Header.helpers({
+    getGroups : function (netid) {
+      user = Users.findOne({username: netid});
+      //console.log(user);
+      if (user == undefined) {
+        Users.insert({username: netid, groups:[]});
+        return [];
+      }
+      console.log(netid + ' added');
+      return user.groups;
+    },
+    getGroupName : function (groupid) {
+     
+      return Groups.findOne({_id: groupid}).groupname;
+    }
+  });
+  
+  Template.Header.events({
+    'click .groupElement' : function (event) {
+      id = event.currentTarget.id;
+      console.log(this.groupid);
+      // TODO: Changes current calendar to the group with _id id.
+      Users.update({username: currentUser.profile.name}, {$set: {current: this.groupid}});
+    },
+    'click .newGroup' : function (event) {
+      // TODO: Something that adds a group, with this person as admin.
+    }
+  });
+
   Template.calendar.helpers({
-      getDays : function () {
-        group = Groups.findOne();
-        console.log(group)
-        console.log(Groups.find().count())
-        if (group) {
-          tempid = group._id;
-          return group.days;
-        }
+    /*getDays : function () {
+      group = Groups.findOne();
+      console.log(group)
+      console.log(Groups.find().count())
+      if (group) {
+        tempid = group._id;
+        return group.days;
+      }
+    },*/
+    getDays : function () {
+      today = new Date();
+      currdayofweek = today.getDay();
+      firstday = today.getDate() - currdayofweek;
+      days = [];
+      for (i = 0; i < 7; ++i) {
+        days[i] = {oneday : Shifts.find({day: i+firstday})};
+      }
+      
+      return days;
     }
   });
 
   Template.setDay.helpers({
-      mapShift : function (start, end, names) {
-        height = 100;
-        width = "100";
-        if (names.length >= 1) colVal = "red";
-        else colVal = "blue";
-        return "style=\"color: " + colVal + ";height:" + height + "px;width:" + width + "px\"";
-      }
+    mapShift : function (start, end, names) {
+      height = 100;
+      width = "100";
+      if (names.length >= 1) colVal = "red";
+      else colVal = "blue";
+      return "style=\"color: " + colVal + ";height:" + height + "px;width:" + width + "px\"";
+    }
     
   });
 
@@ -101,6 +175,7 @@ if (Meteor.isClient) {
       }
     };
     Meteor.loginWithCas([callback]);
+    // console.log('login success');
     return false;
   }
 });
@@ -133,6 +208,7 @@ if (Meteor.isClient) {
   });
 }
 
+
 if (Meteor.isServer) {
 
   Groups.allow({
@@ -146,6 +222,8 @@ if (Meteor.isServer) {
       return true;
     }
   })
+
+
   Meteor.startup(function () {
     // code to run on server at startup
   });
