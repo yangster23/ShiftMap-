@@ -1,40 +1,47 @@
 /* CSS declarations go here */
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  min-height: 100%;
-  /*background-image: linear-gradient(to bottom, #d0edf5, #e1e5f0 100%);*/
+/*.container {
+  	max-width: 600px;
+  	margin: 0 auto;
+  	min-height: 100%;
+}*/
+
+#header1 {
+	position: fixed; 
+   	top: 500px; 
+   	left: 0; 
+   	width: 100%; 
 }
 
-.header1 {
-	font-family: sans-serif;
-  font-size: 2em;
-  text-align: center;
-  display: block;
+#header1 span { 
+   	color: white; 
+   	font: bold 30px/50px Helvetica, Sans-Serif; 
+   	letter-spacing: -1px;  
+   	background: rgb(0, 0, 0); /* fallback color */
+   	background: rgba(0, 0, 0, 0.7);
+   	padding: 10px; 
 }
 
-.header2 {
-	left: 0;
-	line-height: 20px;
-	margin-top: -100px;
-	position: absolute;
-	text-align: center; 
-	top: 25%;
-	width: 100%;
-	display: inline-block;
-}
-.header3 {
-	left: 0;
-	line-height: 20px;
-	margin-top: -100px;
-	position: absolute;
-	text-align: center; 
-	top: 30%;
-	width: 100%;
-	display: inline-block;
+#header1 span.spacer {
+	padding:0 5px;
 }
 
+.btn-lg {
+	margin-top:500px;
+
+}
 
 body {
-	padding-top: 120px;
+	background: url(/2064-8.jpg) no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+  	background-size: cover;
+	padding-top: 150px;
+
+}
+
+.whiteContainer {
+	background-color: white;
+	height:100vh;
+
 }
