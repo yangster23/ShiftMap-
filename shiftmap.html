@@ -3,6 +3,7 @@
 </head>
 
 <template name = "calendar">
+  <div class="well"> 
 
   <style>
   table, th, td {
@@ -26,15 +27,13 @@
         <td>{{>setDay}}</td>
       {{/each}}
   </table>
-    
+  </div>
 </template>
 
 <template name = "Home">
   <div class = "container">
   {{#if currentUser}}
-    <div class="whiteContainer">
       {{> calendar}}
-    </div>
   {{else}}
       <h2 id = "header1"><span>ShiftMap:<span class='spacer'></span><br /><span class='spacer'></span>The time for those annoying emails to request a shift has ended</span></h2>
       <!--<h2 id="header2"><a href="/calendar" >login</a></h2>-->
@@ -56,8 +55,14 @@
 
         <ul class="nav navbar-nav navbar-right">
           {{#if currentUser}}
-            <!--<li><a href="{{ pathFor 'AddStuff' }}">Add Stuff</a></li>
-            <li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
+          <li><a href="/employer-form"><button type="button" class="btn btn-default" aria-label="plus">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </button></a></li>
+
+
+            <li><a href="/help"> Help </a></li>
+            <li><a href="/about-us"> About Us </a></li>
+            <!--<li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
           {{/if}} 
           {{> CasLogin }}
         </ul>
@@ -75,13 +80,13 @@
 
 <template name="CasLogin">
   {{#if currentUser}}
+
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ currentUser.profile.name }}<b class="caret"></b></a>
       <ul class="dropdown-menu" role="menu">
         <li><a href="#" class="btn cas-logout">Logout</a></li>
       </ul>
     </li>
-
 
   {{else}}
     <li><a href="#" class="navbar-link cas-login">Login</a></li>
@@ -99,3 +104,6 @@
       </button>
     {{/each}}
 </template>
+
+
+

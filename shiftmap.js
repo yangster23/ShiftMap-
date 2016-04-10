@@ -2,6 +2,9 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 Groups = new Mongo.Collection('Groups');
+export const Tasks = new Mongo.Collection('tasks');
+export const Employees = new Mongo.Collection('employees');
+export const Shifts = new Mongo.Collection('shifts');
 
 //import './shiftmap.html';
 
@@ -15,6 +18,15 @@ Router.route('/', function () {
 });
 Router.route('/calendar', function () {
   this.render('calendar');
+});
+Router.route('/employer-form', function () {
+  this.render('addForm')
+});
+Router.route('/help', function () {
+  this.render('help')
+});
+Router.route('/about-us', function () {
+  this.render('about-us')
 })
 
 //each group is one document
@@ -44,17 +56,6 @@ if (Meteor.isClient) {
     }
   });
 
-  Template.setDay.helpers({
-      mapShift : function (start, end, names) {
-        height = 100;
-        width = "100";
-        if (names.length >= 1) colVal = "red";
-        else colVal = "blue";
-        return "style=\"color: " + colVal + ";height:" + height + "px;width:" + width + "px\"";
-      }
-    
-  });
-
   Template.calendar.events({
     'click button' : function (event) {
       id = event.currentTarget.id;
@@ -75,6 +76,7 @@ if (Meteor.isClient) {
     }
   });
 
+
   Template.Home.events({
   	'click .caslogin': function(e) {
     	e.preventDefault();
@@ -86,16 +88,16 @@ if (Meteor.isClient) {
     	Meteor.loginWithCas([callback]);
     	return false;
 		}
-	});
+  });
 
   Template.CasLogin.events({
-
   /**
    * Handle the click on the logout link.
    * @param e The click event.
    * @returns {boolean} False.
    */
   'click .cas-logout': function(e) {
+    Router.go('/');
     e.preventDefault();
     Meteor.logout();
     return false;
@@ -117,6 +119,16 @@ if (Meteor.isClient) {
     return false;
   }
 });
+
+  Template.setDay.helpers({
+      mapShift : function (start, end, names) {
+        height = 100;
+        width = "100";
+        if (names.length >= 1) colVal = "red";
+        else colVal = "blue";
+        return "style=\"color: " + colVal + ";height:" + height + "px;width:" + width + "px\"";
+      }
+  });
 
   Template.setDay.events({
     'click button' : function (event) {
@@ -144,6 +156,68 @@ if (Meteor.isClient) {
       Groups.update(tempid,{$set: {days: [{days:"sun", shift: array}, dayArray[1], dayArray[2], dayArray[3], dayArray[4], dayArray[5], dayArray[6]]}});
     }
   });
+
+  Template.addForm.events({
+    'submit .new-task' (event) {
+      // Prevent default browser form submit
+      event.preventDefault();
+   
+      // Get value from form element
+      const target = event.target;
+      const text = target.text.value;
+   
+      // Insert a task into the collection
+      if (text != "")
+        Tasks.insert({text});
+
+      // Clear form
+      target.text.value = '';
+    },
+    'submit .new-employee' (event) {
+      // Prevent default browser form submit
+      event.preventDefault();
+   
+      // Get value from form element
+      const target = event.target;
+      const text = target.text.value;
+   
+      // Insert a task into the collection
+      Employees.insert({
+        text
+      });
+      // Clear form
+      target.text.value = '';
+    },
+
+    'click .btn-xs'(event) {
+
+      const start = template.find("start").value;
+      console.log(start);
+
+    }
+  });
+
+  Template.addForm.helpers({
+    tasks() {
+    return Tasks.find({});
+    },
+    employees() {
+      return Employees.find({});
+    }
+  }); 
+
+  Template.task.events({
+    'click .delete'() {
+      Tasks.remove(this._id);
+    },
+  });
+
+  Template.employee.events({
+    'click .delete'() {
+      Employees.remove(this._id);
+    },
+  });
+
 }
 
 if (Meteor.isServer) {

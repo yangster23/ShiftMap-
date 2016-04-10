@@ -14,7 +14,7 @@
 
 #header1 span { 
    	color: white; 
-   	font: bold 30px/50px Helvetica, Sans-Serif; 
+   	font: bold 30px/53px Helvetica, Sans-Serif; 
    	letter-spacing: -1px;  
    	background: rgb(0, 0, 0); /* fallback color */
    	background: rgba(0, 0, 0, 0.7);
@@ -37,11 +37,98 @@ body {
 	-o-background-size: cover;
   	background-size: cover;
 	padding-top: 150px;
-
 }
 
-.whiteContainer {
-	background-color: white;
+
+.well {
+  background-color: white;
 	height:100vh;
-
 }
+
+form {
+  margin-top: 10px;
+  margin-bottom: -10px;
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.new-task input {
+  box-sizing: border-box;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  width: 100%;
+  padding-right: 10px;
+  font-size: 1em;
+}
+
+.new-employee input {
+  box-sizing: border-box;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  width: 100%;
+  padding-right: 10px;
+  font-size: 1em;
+}
+
+.new-task input:focus{
+  outline: 0;
+}
+
+.new-employee input:focus{
+  outline: 0;
+}
+
+ul.list {
+  margin: 0;
+  padding: 0;
+  background: white;
+}
+
+.delete {
+  float: right;
+  font-weight: bold;
+  background: none;
+  font-size: 1em;
+  border: none;
+  position: relative;
+}
+
+li.listEmployee {
+  position: relative;
+  list-style: none;
+  padding: 15px;
+  border-bottom: #eee solid 1px;
+}
+
+li .text {
+  margin-left: 10px;
+}
+
+.search {
+  width: 150px;
+  clear: both;
+}
+
+.new-task input {
+  padding-bottom: 5px;
+}
+
+#startTime {
+  float:left;
+  padding-right:20px;
+}
+
+#endTime {
+  float:left;
+  padding-right:20px;
+}
+
+#capacity {
+  float:left;
+  padding-right:10px;
+}
+
+
+

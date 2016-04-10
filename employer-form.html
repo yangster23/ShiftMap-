@@ -1,0 +1,78 @@
+<template name="addForm">
+  
+  {{#if currentUser}}
+    <div class="well">
+      <center><h2> Create a new employment </h2></center>
+      Employment Name:<br>
+      <input type="text" name="name"><br>
+       <br>
+
+      <form class="new-task">
+        <input type="text" name="text" placeholder="Type to add new employers"/> 
+      </form>
+      <ul class = "list">
+        {{#each tasks}}
+          {{> task}}
+        {{/each}}
+      </ul>
+
+    <form class="new-employee">
+      <input type="text" name="text" placeholder="Type to add new employees" />
+    </form>
+    <ul class = "list">
+      {{#each employees}}
+      {{> employee}}
+      {{/each}}
+    </ul> 
+
+      <br>
+
+    Please input the start and end time for each individual shifts<br>
+      <br>
+    <div class="bigcontainer">
+      <div id="startTime">
+        Start Time:<br>
+        <input type="text" name="start" placeholder="e.g. 9:00am"/> 
+      </div>
+
+      <div id="endTime">
+        End Time:<br>
+        <input type="text" name="end" placeholder="e.g. 11:00pm"/>
+      </div> 
+
+      <div id="capacity">
+      Capacity:<br>
+        <input type="text" name="capacity" placeholder="e.g. 10"/>
+      </div>
+
+      <br>
+      <button type="button" class="btn btn-default btn-xs"> Submit </button>
+    </div>
+
+      <br>
+      <br>
+
+    Would you like to save these shifts for every week?
+
+        <br>
+      <input type="submit" value="Submit"/>
+
+    </div>
+  {{/if}}
+</template>
+
+<template name="task">
+  <li class="listEmployee">
+    <button class="delete">&times;</button>
+    <span class="text">{{text}}</span>
+  </li>
+</template>
+
+<template name="employee">
+  <li class="listEmployee">
+    <button class="delete">&times;</button>
+    <span class="text">{{text}}</span>
+  </li>
+</template>
+
+
