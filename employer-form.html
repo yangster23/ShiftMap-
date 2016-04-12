@@ -11,6 +11,7 @@
         <input type="text" name="text" placeholder="Type to add new employers"/> 
       </form>
       <ul class = "list">
+      <!-- task is employers -->
         {{#each tasks}}
           {{> task}}
         {{/each}}
@@ -21,7 +22,7 @@
     </form>
     <ul class = "list">
       {{#each employees}}
-      {{> employee}}
+        {{> employee}}
       {{/each}}
     </ul> 
 
@@ -29,25 +30,32 @@
 
     Please input the start and end time for each individual shifts<br>
       <br>
-    <div class="bigcontainer">
-      <div id="startTime">
-        Start Time:<br>
-        <input type="text" name="start" placeholder="e.g. 9:00am"/> 
+    <form class="new-shift">
+      <div class="bigcontainer">
+        <div id="startTime">
+          Start Time:<br>
+          <input type="text" name="start" placeholder="e.g. 9:00am"/> 
+        </div>
+
+        <div id="endTime">
+          End Time:<br>
+          <input type="text" name="end" placeholder="e.g. 11:00pm"/>
+        </div> 
+
+        <div id="capacity">
+        Capacity:<br>
+          <input type="text" name="capacity" placeholder="e.g. 10"/>
+        </div>
+
+        <br>
+        <input type="submit" value="Add Shift"/>
       </div>
-
-      <div id="endTime">
-        End Time:<br>
-        <input type="text" name="end" placeholder="e.g. 11:00pm"/>
-      </div> 
-
-      <div id="capacity">
-      Capacity:<br>
-        <input type="text" name="capacity" placeholder="e.g. 10"/>
-      </div>
-
-      <br>
-      <button type="button" class="btn btn-default btn-xs"> Submit </button>
-    </div>
+    </form>
+      <ul class = "list">
+        {{#each shifts}}
+          {{> shift}}
+        {{/each}}
+      </ul>
 
       <br>
       <br>
@@ -72,6 +80,13 @@
   <li class="listEmployee">
     <button class="delete">&times;</button>
     <span class="text">{{text}}</span>
+  </li>
+</template>
+
+<template name="shift">
+  <li class="listEmployee">
+    <button class="delete">&times;</button>
+    <span class="text">{{start}}</span>
   </li>
 </template>
 
