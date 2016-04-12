@@ -2,6 +2,7 @@
   <title>ShiftMap</title>
 </head>
 
+<!--
 <template name = "calendar">
   <div class="well"> 
 
@@ -24,11 +25,35 @@
 
   <table style="width:100%">
       {{#each getDays}}
-        <td>{{>setDay}}</td>
+        <tr>{{>setDay}}</tr>
       {{/each}}
   </table>
+<<<<<<< HEAD
   </div>
+=======
+    
+</template> -->
+<!-- TODO: Change this to make it into a calendar-->
+<template name = "calendar">
+
+  <style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 5px;
+  }
+  </style>
+  <table style="width:100%;height:100%">
+      {{#each getDays.week}}
+        <td style="width:12.5%">{{>setDay}}</td>
+      {{/each}}
+  </table>
+
+>>>>>>> 87e8307dfc98e078d4549afbbaab23764ff42b41
 </template>
+
 
 <template name = "Home">
   <div class = "container">
@@ -55,6 +80,7 @@
 
         <ul class="nav navbar-nav navbar-right">
           {{#if currentUser}}
+<<<<<<< HEAD
           <li><a href="/employer-form"><button type="button" class="btn btn-default" aria-label="plus">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
           </button></a></li>
@@ -63,6 +89,14 @@
             <li><a href="/help"> Help </a></li>
             <li><a href="/about-us"> About Us </a></li>
             <!--<li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
+=======
+            {{#each getGroups currentUser.profile.name}}
+              <li><a class="groupElement" id={{ groupid }}>{{getGroupName groupid}}</a></li>
+            <!--<li><a href="{{ pathFor 'AddStuff' }}">Add Stuff</a></li>
+            <li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
+            {{/each}}
+            <li><a class="newGroup" id={{ currentUser.profile.name }}>Text goes here</a></li>
+>>>>>>> 87e8307dfc98e078d4549afbbaab23764ff42b41
           {{/if}} 
           {{> CasLogin }}
         </ul>
@@ -93,16 +127,13 @@
   {{/if}}
 </template>
 
-
-  <!-- Retrieve the group and its start, end, and admin --> 
-
+<!-- Retrieve the group and its start, end, and admin --> 
 <template name="setDay">
-  <th>{{day}}</th> 
-    {{#each shift}}
-      <button style={{mapShift startS endS names}} id={{day}}{{startS}}{{endS}}>
-        {{startS}} - {{endS}}
-      </button>
-    {{/each}}
+  {{#each oneday}}
+    <button style={{mapShift start end users currentUser.profile.name}} id={{_id}} a={{currentUser.profile.name}}>
+      {{start}} - {{end}}
+    </button>
+  {{/each}}
 </template>
 
 
