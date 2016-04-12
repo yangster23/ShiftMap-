@@ -3,15 +3,9 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 Users = new Mongo.Collection('Users');
 Groups = new Mongo.Collection('Groups');
-<<<<<<< HEAD
-export const Tasks = new Mongo.Collection('tasks');
-export const Employees = new Mongo.Collection('employees');
-export const Shifts = new Mongo.Collection('shifts');
-=======
 Shifts = new Mongo.Collection('Shifts');
->>>>>>> 87e8307dfc98e078d4549afbbaab23764ff42b41
 
-//import './shiftmap.html';
+
 /**********************************************************************/
 
 // Routing
@@ -114,6 +108,11 @@ function parseTime(inputTime) {
 
 tempid = '';
 if (Meteor.isClient) {
+
+  Tasks = new Mongo.Collection(null);
+  Employees = new Mongo.Collection(null);
+  Shifts = new Mongo.Collection(null);
+
   Template.Header.helpers({
     getGroups : function (netid) {
       user = Users.findOne({username: netid});
@@ -137,9 +136,6 @@ if (Meteor.isClient) {
       // console.log(this.groupid);
       // TODO: Changes current calendar to the group with _id id.
       Users.update({_id: userid}, {$set: {current: id}});
-    },
-    'click .newGroup' : function (event) {
-      // TODO: Something that adds a group, with this person as admin.
     }
   });
 
@@ -192,9 +188,7 @@ if (Meteor.isClient) {
     }
   });
 
-<<<<<<< HEAD
-  Template.calendar.events({
-=======
+
   Template.setDay.helpers({
     mapShift : function (start, end, users) {
       id = idFromName(currentUser());
@@ -211,7 +205,6 @@ if (Meteor.isClient) {
   });
 
   /*Template.calendar.events({
->>>>>>> 87e8307dfc98e078d4549afbbaab23764ff42b41
     'click button' : function (event) {
       id = event.currentTarget.id;
       console.log(id);
@@ -250,41 +243,32 @@ if (Meteor.isClient) {
    * Handle the click on the logout link.
    * @param e The click event.
    * @returns {boolean} False.
-   */
-  'click .cas-logout': function(e) {
-    Router.go('/');
-    e.preventDefault();
-    Meteor.logout();
-    return false;
-  },
+     */
+    'click .cas-logout': function(e) {
+      Router.go('/');
+      e.preventDefault();
+      Meteor.logout();
+      return false;
+    },
 
-  /**
-   * Handle the click on the login link.
-   * @param e The click event.
-   * @returns {boolean} False.
-   */
-  'click .cas-login': function(e) {
-    e.preventDefault();
-    var callback = function loginCallback(error){
-      if (error) {
-        console.log(error);
-      }
-    };
-    Meteor.loginWithCas([callback]);
-    // console.log('login success');
-    return false;
-  }
-});
-
-  Template.setDay.helpers({
-      mapShift : function (start, end, names) {
-        height = 100;
-        width = "100";
-        if (names.length >= 1) colVal = "red";
-        else colVal = "blue";
-        return "style=\"color: " + colVal + ";height:" + height + "px;width:" + width + "px\"";
-      }
+    /**
+     * Handle the click on the login link.
+     * @param e The click event.
+     * @returns {boolean} False.
+     */
+    'click .cas-login': function(e) {
+      e.preventDefault();
+      var callback = function loginCallback(error){
+        if (error) {
+          console.log(error);
+        }
+      };
+      Meteor.loginWithCas([callback]);
+      // console.log('login success');
+      return false;
+    }
   });
+
 
   Template.setDay.events({
     'click button' : function (event) {
@@ -345,27 +329,42 @@ if (Meteor.isClient) {
       const text = target.text.value;
    
       // Insert a task into the collection
-      Employees.insert({
-        text
-      });
+      if (text != "")
+        Employees.insert({text});
       // Clear form
       target.text.value = '';
     },
 
-    'click .btn-xs'(event) {
+    'submit .new-shift'(event) {
 
-      const start = template.find("start").value;
-      console.log(start);
+      event.preventDefault();
+
+      start = event.target.start.value;
+      end = event.target.end.value;
+      capacity = event.target.capacity.value;
+
+      var re = "^(0|1)?[0-9]:[0-5][0-9](am|pm)$"
+
+      if (start.match(re) != null && end.match(re) != null && parseInt(capacity) > 0) {
+        Shifts.insert({start: start});
+      }
+
+      event.target.start.value = '';
+      event.target.end.value = '';
+      event.target.capacity.value = '';
 
     }
   });
 
   Template.addForm.helpers({
     tasks() {
-    return Tasks.find({});
+      return Tasks.find({});
     },
     employees() {
       return Employees.find({});
+    },
+    shifts() {
+      return Shifts.find({});
     }
   }); 
 
@@ -378,6 +377,12 @@ if (Meteor.isClient) {
   Template.employee.events({
     'click .delete'() {
       Employees.remove(this._id);
+    },
+  });
+
+  Template.shift.events({
+    'click .delete'() {
+      Shifts.remove(this._id);
     },
   });
 

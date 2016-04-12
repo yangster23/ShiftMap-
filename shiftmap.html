@@ -35,7 +35,6 @@
 </template> -->
 <!-- TODO: Change this to make it into a calendar-->
 <template name = "calendar">
-
   <style>
   table, th, td {
     border: 1px solid black;
@@ -50,8 +49,6 @@
         <td style="width:12.5%">{{>setDay}}</td>
       {{/each}}
   </table>
-
->>>>>>> 87e8307dfc98e078d4549afbbaab23764ff42b41
 </template>
 
 
@@ -79,24 +76,19 @@
       <ul class="collapse navbar-collapse" id="main-nav">
 
         <ul class="nav navbar-nav navbar-right">
+          <li><a href="/help"> Help </a></li>
+          <li><a href="/about-us"> About Us </a></li>
+          
           {{#if currentUser}}
-<<<<<<< HEAD
-          <li><a href="/employer-form"><button type="button" class="btn btn-default" aria-label="plus">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-          </button></a></li>
-
-
-            <li><a href="/help"> Help </a></li>
-            <li><a href="/about-us"> About Us </a></li>
-            <!--<li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
-=======
+            <li><a href="/employer-form"><button type="button" class="btn btn-default" aria-label="plus">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button></a></li>
+              <!--<li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
             {{#each getGroups currentUser.profile.name}}
               <li><a class="groupElement" id={{ groupid }}>{{getGroupName groupid}}</a></li>
-            <!--<li><a href="{{ pathFor 'AddStuff' }}">Add Stuff</a></li>
-            <li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
+              <!--<li><a href="{{ pathFor 'AddStuff' }}">Add Stuff</a></li>
+              <li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
             {{/each}}
-            <li><a class="newGroup" id={{ currentUser.profile.name }}>Text goes here</a></li>
->>>>>>> 87e8307dfc98e078d4549afbbaab23764ff42b41
           {{/if}} 
           {{> CasLogin }}
         </ul>
