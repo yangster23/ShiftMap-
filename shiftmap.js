@@ -111,7 +111,7 @@ if (Meteor.isClient) {
 
   Tasks = new Mongo.Collection(null);
   Employees = new Mongo.Collection(null);
-  Shifts = new Mongo.Collection(null);
+  FormShifts = new Mongo.Collection(null);
 
   Template.Header.helpers({
     getGroups : function (netid) {
@@ -346,7 +346,7 @@ if (Meteor.isClient) {
       var re = "^(0|1)?[0-9]:[0-5][0-9](am|pm)$"
 
       if (start.match(re) != null && end.match(re) != null && parseInt(capacity) > 0) {
-        Shifts.insert({start: start});
+        FormShifts.insert({start: start});
       }
 
       event.target.start.value = '';
@@ -363,8 +363,8 @@ if (Meteor.isClient) {
     employees() {
       return Employees.find({});
     },
-    shifts() {
-      return Shifts.find({});
+    formShifts() {
+      return FormShifts.find({});
     }
   }); 
 
@@ -382,7 +382,7 @@ if (Meteor.isClient) {
 
   Template.shift.events({
     'click .delete'() {
-      Shifts.remove(this._id);
+      FormShifts.remove(this._id);
     },
   });
 
