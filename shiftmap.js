@@ -6,7 +6,9 @@ Groups = new Mongo.Collection('Groups');
 Shifts = new Mongo.Collection('Shifts');
 
 //import './shiftmap.html';
+/**********************************************************************/
 
+// Routing
 Router.configure({
   layoutTemplate: 'Layout',
   //waitOn: function() { return Meteor.subscribe("Stuff"); },
@@ -18,6 +20,10 @@ Router.route('/', function () {
 Router.route('/calendar', function () {
   this.render('calendar');
 })
+
+/**********************************************************************/
+// helper functions
+
 function currentUser() {
   return Meteor.user().profile.name;
 }
@@ -64,7 +70,6 @@ function changeUserInGroup(cuserid, groupid) {
   Groups.update({_id: groupid}, {$set: {users: newusers}});
 }
 
-
 function changeUserInShift(cuserid, shiftid) {
   shift = Shifts.findOne({_id: shiftid});
   newusers = shift.users;
@@ -78,10 +83,22 @@ function changeUserInShift(cuserid, shiftid) {
   Shifts.update({_id: shiftid}, {$set: {users: newusers}});
 }
 
+// takes in a inputTime of the form hour:minuteam/pm and then converts
+// it to am/pmHH:mm 
+function parseTime(inputTime) {
+  length = inputTime.length;
+  copy = "" + inputTime;
+  if (length < 7) {
+    copy = "0" + copy;
+  }
+  meridiem = copy.substring(6, 8);
+  return (meridiem + copy.substring(0, 6));
+}
+
+/**********************************************************************/
+
 tempid = '';
 if (Meteor.isClient) {
- // Session.set('currentGroup',Users.findOne({currentUser.profile.name));// TODO
-
   Template.Header.helpers({
     getGroups : function (netid) {
       user = Users.findOne({username: netid});
@@ -101,9 +118,10 @@ if (Meteor.isClient) {
   Template.Header.events({
     'click .groupElement' : function (event) {
       id = event.currentTarget.id;
+      userid = idFromName(currentUser())
       // console.log(this.groupid);
       // TODO: Changes current calendar to the group with _id id.
-      Users.update({username: currentUser()}, {$set: {current: id}});
+      Users.update({_id: userid}, {$set: {current: id}});
     },
     'click .newGroup' : function (event) {
       // TODO: Something that adds a group, with this person as admin.
@@ -124,21 +142,38 @@ if (Meteor.isClient) {
     // retrieve the current group's shifts in an array for the week
     getDays : function () {
       user = Users.findOne({username: currentUser()});
-      current = user.current;
+      userid = user._id;
+      // returns the current GROUP!
+      currentGroup = user.current;
 
-      if (current == undefined) {
-        ; // TODO: if the user has no predefined current group
+      if (currentGroup == undefined) {
+        currentGroup = user.groups[0].groupid;
+        if (currentGroup == undefined) {
+          return [];
+        }
+        Users.update({_id: userid}, {$set: {current: currentGroup}}); // TODO: if the user has no predefined current group
       }
 
       today = new Date();
       currdayofweek = today.getDay();
       firstday = today.getDate() - currdayofweek;
       days = [];
-      for (i = 0; i < 7; ++i) {
-        days[i] = {oneday : Shifts.find({groupid: current, day: i+firstday})};
-      }
+      min = "pm11:59";
       
-      return days;
+      for (i = 0; i < 7; ++i) {
+        days[i] = {oneday : Shifts.find({groupid: currentGroup, day: i+firstday})};
+
+        shifts = days[i].oneday.fetch();
+        for (j = 0; j < shifts.length; j++) {
+          t = parseTime(shifts[j]);
+          if (t < min) {
+            min = t;
+          }
+        }
+
+
+      } 
+      return {week: days, startHour: parseInt(min.substring(2,4))};
     }
   });
 
@@ -150,9 +185,9 @@ if (Meteor.isClient) {
       } else {
         colVal = "blue"
       }
-      height = 100;
+      height = "100";
       width = "100";
-      return "style=\"color: " + colVal + ";height:" + height + "px;width:" + width + "px\"";
+      return "style=\"color: " + colVal + ";height:" + height + ";width:" + width + "\"";
     }
     
   });
@@ -258,7 +293,29 @@ if (Meteor.isServer) {
     }
   });
 
+  Users.allow({
+    'update': function() {
+      return true;
+    },
+    'insert': function() {
+      return true;
+    },
+    'remove': function() {
+      return true;
+    }
+  });
 
+  Shifts.allow({
+    'update': function() {
+      return true;
+    },
+    'insert': function() {
+      return true;
+    },
+    'remove': function() {
+      return true;
+    }
+  });
   Meteor.startup(function () {
     // code to run on server at startup
   });
