@@ -87,7 +87,7 @@
             </button></a></li>
               <!--<li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
             {{#each getGroups currentUser.profile.name}}
-              <li><a class="groupElement" id={{ groupid }}>{{getGroupName groupid}}</a></li>
+              <li><a class="groupElement" href="/" id={{ groupid }}>{{getGroupName groupid}}</a></li>
               <!--<li><a href="{{ pathFor 'AddStuff' }}">Add Stuff</a></li>
               <li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
             {{/each}}

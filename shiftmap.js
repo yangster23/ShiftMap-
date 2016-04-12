@@ -17,9 +17,6 @@ Router.configure({
 Router.route('/', function () {
   this.render('Home');
 });
-Router.route('/calendar', function () {
-  this.render('calendar');
-});
 Router.route('/employer-form', function () {
   this.render('addForm')
 });
