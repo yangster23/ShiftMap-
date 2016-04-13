@@ -34,8 +34,64 @@
     
 </template> -->
 <!-- TODO: Change this to make it into a calendar-->
+
 <template name = "calendar">
   <div class="well">
+  <h2> <center> Calendar of Shifts </center> </h2> 
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>  </th>
+        <th> Sunday </th>
+        <th> Monday </th>
+        <th> Tuesday </th>
+        <th> Wednesday </th>
+        <th> Thursday </th> 
+        <th> Friday </th> 
+        <th> Saturday </th> 
+      </tr>
+    </thead>
+
+    <tbody>
+            <tr>
+              <th></th>
+              {{#each getDays.week}}
+                <th>{{dayOfWeek}}</th>
+              {{/each}}
+            </tr>
+    </tbody>
+
+    <tbody>
+      <tr class="hola"><td> 8am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr>
+      <tr><td> 9am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 10am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 11am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 12pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 1pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 2pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 3pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 4pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 5pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 6pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 7pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 8pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 9pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 10pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+      <tr><td> 11pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+    </tbody>
+
+    <td></td>
+    {{#each getDays.week}}
+      <td>{{>setDay}}</td>
+    {{/each}}
+  </table>
+</div>
+</template>
+
+<!--<template name = "calendar">
+  <div class="well">
+
+  <h2> <center> Calendar of Shifts </center> </h2> 
   <style>
   table, th, td {
     border: 1px solid black;
@@ -45,13 +101,52 @@
     padding: 5px;
   }
   </style>
-  <table style="width:100%;height:100%">
-      {{#each getDays.week}}
-        <td style="width:12.5%">{{>setDay}}</td>
-      {{/each}}
-  </table>
-</div>
-</template>
+
+        <table class="table table-bordered">
+          <tbody>
+              <tr><td> 8am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr>
+              <tr><td> 9am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 10am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 11am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 12pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 1pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 2pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 3pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 4pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 5pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 6pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 7pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 8pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 9pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 10pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+              <tr><td> 11pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+          </tbody>
+      </table>
+    <div id="calendarTable">
+      <table class="table table-bordered">
+          <thead>
+            <tr>
+                  <th>Sunday</th>
+                  <th>Monday</th>
+                  <th>Tuesday</th>
+                  <th>Wednesday</th>
+                  <th>Thursday</th>
+                  <th>Friday</th>
+                  <th>Saturday</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              {{#each getDays.week}}
+                <th>{{dayOfWeek}}</th>
+              {{/each}}
+            </tr>
+          </tbody>
+
+          
+      </table>
+    </div>-->
 
 
 <template name = "Home">
@@ -88,7 +183,8 @@
               <!--<li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
             {{#each getGroups currentUser.profile.name}}
               <li><a class="groupElement" href="/" id={{ groupid }}>{{getGroupName groupid}}</a></li>
-              
+              <!--<li><a href="{{ pathFor 'AddStuff' }}">Add Stuff</a></li>
+              <li><a href="{{ pathFor 'ListStuff' }}">List Stuff</a></li>-->
             {{/each}}
           {{/if}} 
           {{> CasLogin }}
@@ -128,6 +224,7 @@
     </button>
   {{/each}}
 </template>
+
 
 
 

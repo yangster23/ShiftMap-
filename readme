@@ -13,9 +13,8 @@ users: {_id: string, profile: {name: string}}
 // current is the default group to display
 Users: {_id: string, username: string, groups: [{groupid: string}], current: string}
 
-Groups: {_id: string, groupname: string, employers: [{userid: string}], users: [{userid: string}], repeat: boolean}
+Groups: {_id: string, groupname: string, employers: [{userid: string}], users: [{userid: string}]}
 
 // we will have to split start and end time via ":"
-Shifts: {_id: string, day: int, month: string, start: string, end: string, users: [{userid: string}], groupid: string, capacity: int,
-tempin: [{userid: string}], tempout: [{userid: string}]}
+Shifts: {_id: string, day: int, month: string, start: string, end: string, users: [{userid: string}], groupid: string}
 

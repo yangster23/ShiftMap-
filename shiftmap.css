@@ -79,3 +79,12 @@ li.listForm {
   float:left;
   padding-right:10px;
 }
+
+#timeTable {
+  float:left;
+  }
+
+#calendarTable {
+  float:left;
+  line-height: 1.7em;
+}
