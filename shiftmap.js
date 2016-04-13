@@ -35,7 +35,7 @@ function currentUser() {
 }
 
 function idFromName(netid) {
-  user = Users.findOne({username: netid});
+  var user = Users.findOne({username: netid});
   if (user == undefined) {
     return Users.insert({username: netid, groups:[]});
   }
@@ -43,11 +43,11 @@ function idFromName(netid) {
 }
 
 function indexUser(userid, users) {
-  console.log("inside indexUser");
-  console.log(users);
-  for (i = 0; i < users.length; i++) {
-    console.log(users[i].userid);
-    console.log(userid);
+  // console.log("inside indexUser");
+  // console.log(users);
+  var l = users.length;
+  for (var i = 0; i < l; i++) {
+    console.log(i);
     if (users[i].userid == userid) {
       return i;
     }
@@ -58,24 +58,21 @@ function indexUser(userid, users) {
 
 // adds cgroupid from the user with userid if it is not there, removes otherwise
 function changeGroup(userid, cgroupid) {
-  user = Users.findOne({_id: userid});
-  newgroups = user.groups;
-  for (i = 0; i < newgroups.length; i++) {
-    if (newgroups[i].groupid == cgroupid) {
-      newgroups.splice(i, 1);
-      Users.update({_id: userid}, {$set: {groups: newgroups}});
-      return;
-    }
+  var user = Users.findOne({_id: userid});
+  var newgroups = user.groups;
+  if (indexUser(userid, newgroups) != -1) {
+    newgroups.splice(i,1);
+  } else { 
+    newgroups.push({"groupid": cgroupid});
   }
-  newgroups.push({"groupid": cgroupid});
   Users.update({_id: userid}, {$set: {groups: newgroups}});
 }
 
 // adds cuserid from the group with groupid if it is not there, removes otherwise
 function changeUserInGroup(cuserid, groupid) {
-  group = Groups.findOne({_id: groupid});
-  newusers = group.users;
-  i = indexUser(cuserid, newusers);
+  var group = Groups.findOne({_id: groupid});
+  var newusers = group.users;
+  var i = indexUser(cuserid, newusers);
   if (i >= 0) {
     newusers.splice(i,1);
   } else {
@@ -85,9 +82,9 @@ function changeUserInGroup(cuserid, groupid) {
 }
 
 function changeUserInShift(cuserid, shiftid) {
-  shift = Shifts.findOne({_id: shiftid});
-  newusers = shift.users;
-  i = indexUser(cuserid, newusers);
+  var shift = Shifts.findOne({_id: shiftid});
+  var newusers = shift.users;
+  var i = indexUser(cuserid, newusers);
   console.log(i);
   if (i >= 0){
     newusers.splice(i,1);
@@ -100,13 +97,12 @@ function changeUserInShift(cuserid, shiftid) {
 // takes in a inputTime of the form hour:minuteam/pm and then converts
 // it to am/pmHH:mm 
 function parseTime(inputTime) {
-  length = inputTime.length;
-  copy = "" + inputTime;
+  var length = inputTime.length;
+  var copy = "" + inputTime;
   if (length < 7) {
     copy = "0" + copy;
   }
-  meridiem = copy.substring(6, 8);
-  return (meridiem + copy.substring(0, 6));
+  return copy.substring(6, 8) + copy.substring(0, 6);
 }
 
 /**********************************************************************/
@@ -120,7 +116,7 @@ if (Meteor.isClient) {
 
   Template.Header.helpers({
     getGroups : function (netid) {
-      user = Users.findOne({_id: idFromName(netid)});
+      var user = Users.findOne({_id: idFromName(netid)});
       // console.log(netid + ' added');
       return user.groups;
     },
@@ -131,45 +127,35 @@ if (Meteor.isClient) {
   
   Template.Header.events({
     'click .groupElement' : function (event) {
-      id = event.currentTarget.id;
-      userid = idFromName(currentUser())
+      var id = event.currentTarget.id;
+      var userid = idFromName(currentUser())
       // console.log(this.groupid);
-      // TODO: Changes current calendar to the group with _id id.
       Users.update({_id: userid}, {$set: {current: id}});
     }
   });
 
   Template.calendar.helpers({
-    /*getDays : function () {
-      group = Groups.findOne();
-      console.log(group)
-      console.log(Groups.find().count())
-      if (group) {
-        tempid = group._id;
-        return group.days;
-      }
-    },*/
 
     // retrieve the current group's shifts in an array for the week
     getDays : function () {
-      user = Users.findOne({username: currentUser()});
-      userid = user._id;
+      var user = Users.findOne({username: currentUser()});
+      var userid = user._id;
       // returns the current GROUP!
-      currentGroup = user.current;
+      var currentGroup = user.current;
 
       if (currentGroup == undefined) {
         currentGroup = user.groups[0].groupid;
         if (currentGroup == undefined) {
           return [];
         }
-        Users.update({_id: userid}, {$set: {current: currentGroup}}); // TODO: if the user has no predefined current group
+        Users.update({_id: userid}, {$set: {current: currentGroup}}); 
       }
 
-      today = new Date();
-      currdayofweek = today.getDay();
-      firstday = today.getDate() - currdayofweek;
-      days = [];
-      min = "pm11:59";
+      var today = new Date();
+      var currdayofweek = today.getDay();
+      var firstday = today.getDate() - currdayofweek;
+      var days = [];
+      var min = "pm11:59";
       
       for (i = 0; i < 7; ++i) {
         days[i] = {oneday : Shifts.find({groupid: currentGroup, day: i+firstday})};
@@ -191,14 +177,15 @@ if (Meteor.isClient) {
 
   Template.setDay.helpers({
     mapShift : function (start, end, users) {
-      id = idFromName(currentUser());
+      var id = idFromName(currentUser());
+      var colVal = "";
       if (indexUser(id, users) >= 0) {
         colVal = "red"
       } else {
         colVal = "blue"
       }
-      height = "100";
-      width = "100";
+      var height = "100";
+      var width = "100";
       return "style=\"color: " + colVal + ";height:" + height + ";width:" + width + "\"";
     }
     
@@ -251,10 +238,7 @@ if (Meteor.isClient) {
 
   Template.setDay.events({
     'click button' : function (event) {
-
-      id = event.currentTarget.id;
-      userid = idFromName(currentUser());
-      changeUserInShift(userid, id);
+      changeUserInShift(idFromName(currentUser(),event.currentTarget.id));
     }
   });
 
@@ -310,64 +294,68 @@ if (Meteor.isClient) {
     },
 
     'click .btn-primary'(event) {
-      groupname = document.getElementById('employmentName').value;
-      repeat = document.getElementById('repeat').checked;
+      var groupname = document.getElementById('employmentName').value;
+      var repeat = document.getElementById('repeat').checked;
       Tasks.insert({employer: currentUser()});
-      employers = Tasks.find().fetch();
-      shifts = FormShifts.find().fetch();
+      var employers = Tasks.find().fetch();
+      var shifts = FormShifts.find().fetch();
       
       //console.log(employers);
       //console.log(employees);
       
 
-      // converge employernames to employerids and then adds employerids to employee ids if it's not already there
-      for (i = 0; i < employers.length; i++) {
+      // convert employernames to employerids and then adds employerids to employee ids if it's not already there
+      for (var i = 0; i < employers.length; i++) {
         if (Employees.find({employee: employers[i].employer}).count() == 0) {
           Employees.insert({employee: employers[i].employer});
         }
       }
-      employees = Employees.find().fetch();
+      var employees = Employees.find().fetch();
 
       console.log(employers);
       console.log(employees);
 
-      employeeids = [];
-      employerids = [];
+      var employeeids = [];
+      var employerids = [];
       console.log("id arrays made")
       console.log(employeeids);
       console.log(employerids);
-      for (i = 0; i < employees.length; i++) {
+      for (var i = 0; i < employees.length; i++) {
         employeeid = idFromName(employees[i].employee);
         employeeids.push({"userid": employeeid});
       }
       console.log(employeeids);
 
-      for (i = 0; i < employers.length; i++) {
+      for (var i = 0; i < employers.length; i++) {
         employerid = idFromName(employers[i].employer);
         employerids[i] = {"userid": employerid};
       }
 
       console.log(employerids);
-      groupid = Groups.insert({"groupname": groupname, "repeat": repeat, "employers": employerids, "users": employeeids});
+      var groupid = Groups.insert({"groupname": groupname, "repeat": repeat, "employers": employerids, "users": employeeids});
 
       // adding the group to each employee
-      /*for (i = 0; i < employeeids.length; i++) {
+      var l = employeeids.length;
+      console.log(employeeids.length);
+     
+      for (var i = 0; i < employeeids.length; i++) {
         changeGroup(employeeids[i].userid, groupid);
-      }*/
+        console.log(i);
+        console.log(employeeids.length);
+        console.log(i < employeeids.length);
+      }
       console.log("groups added");
       // adding the shifts to the Shifts collection
-      /*for (i = 0; i < shifts.length; i++) {
-        // we need to put in an empty users array
-        // groupid 
-        today = new Date();
+      for (var i = 0; i < shifts.length; i++) { 
+        var today = new Date();
         Shifts.insert({"groupid" : groupid, "start" : shifts[i].start, "end" : shifts[i].end, "capacity" : shifts[i].capacity, "users" : [], day : today.getDate()});
-      }*/
+      }
 
-      //Tasks.remove({});
-      //Employees.remove({});
-      //FormShifts.remove({});
+      Tasks.remove({});
+      Employees.remove({});
+      FormShifts.remove({});
 
-      //Router.go('/');
+      Router.go('/');
     }
   });
 
