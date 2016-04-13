@@ -7,26 +7,34 @@
       <input type="text" name="name"><br>
        <br>
 
-      <form class="new-task">
-        <input type="text" name="text" placeholder="Type to add new employers"/> 
-      </form>
-      <ul class = "list">
-      <!-- task is employers -->
+    <form class="new-task">
+      <div class="form-group">
+        <label for="inputEmployer">New Employer</label>
+        <input type="text" class="form-control" name="text" id="employer" placeholder= "Type to add new employer">
+      </div>
+    </form>
+    
+    <table class = "table table-striped table-hover">
+      <tbody>
         {{#each tasks}}
-          {{> task}}
+        <tr>{{> task}}</tr>
         {{/each}}
-      </ul>
+      </tbody>
+    </table>
 
     <form class="new-employee">
-      <input type="text" name="text" placeholder="Type to add new employees" />
+      <div class="form-group">
+        <label for="inputEmployee">New Employee</label>
+        <input type="text" class="form-control" name="text" id="employee" placeholder= "Type to add new employee">
+      </div>
     </form>
-    <ul class = "list">
-      {{#each employees}}
-        {{> employee}}
-      {{/each}}
-    </ul> 
-
-      <br>
+    <table class = "table table-striped table-hover">
+      <tbody>
+        {{#each employees}}
+        <tr>{{> employee}}</tr>
+        {{/each}}
+      </tbody>
+    </table>
 
     Please input the start and end time for each individual shifts<br>
       <br>
@@ -58,33 +66,37 @@
       </ul>
 
       <br>
-      <br>
 
-    Would you like to save these shifts for every week?
+    <div class="checkbox">
+      <label>
+        <input type="checkbox"> Would you like to save these shifts for every week? 
+      </label>
+    </div>
 
-        <br>
-      <input type="submit" value="Submit"/>
+    <br> 
+
+    <button type="submit" class="btn btn-primary"> Submit </button>
 
     </div>
   {{/if}}
 </template>
 
 <template name="task">
-  <li class="listEmployee">
+  <li class="listForm">
     <button class="delete">&times;</button>
-    <span class="text">{{text}}</span>
+    <span class="text">{{employer}}</span>
   </li>
 </template>
 
 <template name="employee">
-  <li class="listEmployee">
+  <li class="listForm">
     <button class="delete">&times;</button>
-    <span class="text">{{text}}</span>
+    <span class="text">{{employee}}</span>
   </li>
 </template>
 
 <template name="shift">
-  <li class="listEmployee">
+  <li class="listForm">
     <button class="delete">&times;</button>
     <span class="text">{{start}}</span>
   </li>

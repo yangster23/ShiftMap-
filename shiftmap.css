@@ -1,89 +1,48 @@
 /* CSS declarations go here */
 /*.container {
-  	max-width: 600px;
-  	margin: 0 auto;
-  	min-height: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 100%;
 }*/
 
 #header1 {
-	position: fixed; 
-   	top: 500px; 
-   	left: 0; 
-   	width: 100%; 
+  position: fixed; 
+    top: 500px; 
+    left: 0; 
+    width: 100%; 
 }
 
 #header1 span { 
-   	color: white; 
-   	font: bold 30px/53px Helvetica, Sans-Serif; 
-   	letter-spacing: -1px;  
-   	background: rgb(0, 0, 0); /* fallback color */
-   	background: rgba(0, 0, 0, 0.7);
-   	padding: 10px; 
+    color: white; 
+    font: bold 30px/53px Helvetica, Sans-Serif; 
+    letter-spacing: -1px;  
+    background: rgb(0, 0, 0); /* fallback color */
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px; 
 }
 
 #header1 span.spacer {
-	padding:0 5px;
+  padding:0 5px;
 }
 
 .btn-lg {
-	margin-top:500px;
+  margin-top:500px;
 
 }
 
 body {
-	background: url(/2064-8.jpg) no-repeat center center fixed; 
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-  	background-size: cover;
-	padding-top: 150px;
+  background: url(/2064-8.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+    background-size: cover;
+  padding-top: 150px;
 }
 
 
 .well {
   background-color: white;
-	height:100vh;
-}
-
-form {
-  margin-top: 10px;
-  margin-bottom: -10px;
-  position: relative;
-  padding-bottom: 20px;
-}
-
-.new-task input {
-  box-sizing: border-box;
-  padding: 10px 0;
-  background: transparent;
-  border: none;
-  width: 100%;
-  padding-right: 10px;
-  font-size: 1em;
-}
-
-.new-employee input {
-  box-sizing: border-box;
-  padding: 10px 0;
-  background: transparent;
-  border: none;
-  width: 100%;
-  padding-right: 10px;
-  font-size: 1em;
-}
-
-.new-task input:focus{
-  outline: 0;
-}
-
-.new-employee input:focus{
-  outline: 0;
-}
-
-ul.list {
-  margin: 0;
-  padding: 0;
-  background: white;
+  height:cover;
 }
 
 .delete {
@@ -95,20 +54,11 @@ ul.list {
   position: relative;
 }
 
-li.listEmployee {
+li.listForm {
   position: relative;
   list-style: none;
   padding: 15px;
   border-bottom: #eee solid 1px;
-}
-
-li .text {
-  margin-left: 10px;
-}
-
-.search {
-  width: 150px;
-  clear: both;
 }
 
 .new-task input {
@@ -129,6 +79,3 @@ li .text {
   float:left;
   padding-right:10px;
 }
-
-
-

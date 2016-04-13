@@ -311,8 +311,8 @@ if (Meteor.isClient) {
       const text = target.text.value;
    
       // Insert a task into the collection
-      if (text != "")
-        Tasks.insert({text});
+      if (text != "" && Tasks.find({employer: text}).count() == 0)
+        Tasks.insert({employer: text});
 
       // Clear form
       target.text.value = '';
@@ -327,7 +327,7 @@ if (Meteor.isClient) {
    
       // Insert a task into the collection
       if (text != "")
-        Employees.insert({text});
+        Employees.insert({employee: text});
       // Clear form
       target.text.value = '';
     },
