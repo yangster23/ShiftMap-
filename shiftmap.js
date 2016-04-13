@@ -36,15 +36,23 @@ function currentUser() {
 
 function idFromName(netid) {
   user = Users.findOne({username: netid});
+  if (user == undefined) {
+    return Users.insert({username: netid, groups:[]});
+  }
   return user._id;
 }
 
 function indexUser(userid, users) {
-  for (i = 0; i < users.length; ++i) {
+  console.log("inside indexUser");
+  console.log(users);
+  for (i = 0; i < users.length; i++) {
+    console.log(users[i].userid);
+    console.log(userid);
     if (users[i].userid == userid) {
       return i;
     }
   }
+  console.log("returning -1");
   return -1;
 }
 
@@ -52,15 +60,15 @@ function indexUser(userid, users) {
 function changeGroup(userid, cgroupid) {
   user = Users.findOne({_id: userid});
   newgroups = user.groups;
-  for (i = 0; i < newgroups.length; ++i) {
+  for (i = 0; i < newgroups.length; i++) {
     if (newgroups[i].groupid == cgroupid) {
       newgroups.splice(i, 1);
       Users.update({_id: userid}, {$set: {groups: newgroups}});
       return;
     }
   }
-  newgroups.push({groupid: cgroupid});
-  Users.update({_id: netid}, {$set: {groups: newgroups}});
+  newgroups.push({"groupid": cgroupid});
+  Users.update({_id: userid}, {$set: {groups: newgroups}});
 }
 
 // adds cuserid from the group with groupid if it is not there, removes otherwise
@@ -112,12 +120,7 @@ if (Meteor.isClient) {
 
   Template.Header.helpers({
     getGroups : function (netid) {
-      user = Users.findOne({username: netid});
-      // console.log(user);
-      if (user == undefined) {
-        Users.insert({username: netid, groups:[]});
-        return [];
-      }
+      user = Users.findOne({_id: idFromName(netid)});
       // console.log(netid + ' added');
       return user.groups;
     },
@@ -201,27 +204,6 @@ if (Meteor.isClient) {
     
   });
 
-  /*Template.calendar.events({
-    'click button' : function (event) {
-      id = event.currentTarget.id;
-      console.log(id);
-      if (id == "erase") Groups.remove(tempid);
-      if (id == "add") {
-        tempid = Groups.insert({start: 9, end: 17, admin: 'hello', 
-          days: [
-          {day: "sun", shift: [{day: "sun", startS: 10, endS: 11, names: [], max: "10"}, {day: "sun", startS: 11, endS: 12, names: [], max: "10"}, {day: "sun", startS: 13, endS: 14, names: [], max: "10"}]},
-          {day: "mon", shift: []},
-          {day: "tue", shift: []},
-          {day: "wed", shift: []},
-          {day: "thu", shift: []},
-          {day: "fri", shift: []},
-          {day: "sat", shift: []}]
-        });
-      }
-    }
-  }); */
-
-
   Template.Home.events({
   	'click .caslogin': function(e) {
     	e.preventDefault();
@@ -273,31 +255,6 @@ if (Meteor.isClient) {
       id = event.currentTarget.id;
       userid = idFromName(currentUser());
       changeUserInShift(userid, id);
-      /* shift = Shifts.findOne({_id: id})
-
-
-      dayArray = Groups.findOne().days;
-      startTime = id.slice(3,5);
-      endTime = id.slice(5,7);
-
-      if (id.slice(0,3) == "sun") {
-        array = dayArray[0].shift;
-        for (i = 0; i < array.length; i++) {
-          if (array[i].startS == startTime && array[i].endS == endTime) {
-            if (array[i].names.length >= 1) {
-              document.getElementById(id).style.color = "blue";
-              array[i].names = [];
-            }
-            else {
-              array[i].names = ["Hello"];
-              document.getElementById(id).style.color = "red";
-            }
-          }
-        }
-      }*/
-      
-
-
     }
   });
 
@@ -343,13 +300,74 @@ if (Meteor.isClient) {
       var re = "^(0|1)?[0-9]:[0-5][0-9](am|pm)$"
 
       if (start.match(re) != null && end.match(re) != null && parseInt(capacity) > 0) {
-        FormShifts.insert({start: start});
+        FormShifts.insert({"start": start, "end": end, "capacity": capacity});
       }
 
       event.target.start.value = '';
       event.target.end.value = '';
       event.target.capacity.value = '';
 
+    },
+
+    'click .btn-primary'(event) {
+      groupname = document.getElementById('employmentName').value;
+      repeat = document.getElementById('repeat').checked;
+      Tasks.insert({employer: currentUser()});
+      employers = Tasks.find().fetch();
+      shifts = FormShifts.find().fetch();
+      
+      //console.log(employers);
+      //console.log(employees);
+      
+
+      // converge employernames to employerids and then adds employerids to employee ids if it's not already there
+      for (i = 0; i < employers.length; i++) {
+        if (Employees.find({employee: employers[i].employer}).count() == 0) {
+          Employees.insert({employee: employers[i].employer});
+        }
+      }
+      employees = Employees.find().fetch();
+
+      console.log(employers);
+      console.log(employees);
+
+      employeeids = [];
+      employerids = [];
+      console.log("id arrays made")
+      console.log(employeeids);
+      console.log(employerids);
+      for (i = 0; i < employees.length; i++) {
+        employeeid = idFromName(employees[i].employee);
+        employeeids.push({"userid": employeeid});
+      }
+      console.log(employeeids);
+
+      for (i = 0; i < employers.length; i++) {
+        employerid = idFromName(employers[i].employer);
+        employerids[i] = {"userid": employerid};
+      }
+
+      console.log(employerids);
+      groupid = Groups.insert({"groupname": groupname, "repeat": repeat, "employers": employerids, "users": employeeids});
+
+      // adding the group to each employee
+      /*for (i = 0; i < employeeids.length; i++) {
+        changeGroup(employeeids[i].userid, groupid);
+      }*/
+      console.log("groups added");
+      // adding the shifts to the Shifts collection
+      /*for (i = 0; i < shifts.length; i++) {
+        // we need to put in an empty users array
+        // groupid 
+        today = new Date();
+        Shifts.insert({"groupid" : groupid, "start" : shifts[i].start, "end" : shifts[i].end, "capacity" : shifts[i].capacity, "users" : [], day : today.getDate()});
+      }*/
+
+      //Tasks.remove({});
+      //Employees.remove({});
+      //FormShifts.remove({});
+
+      //Router.go('/');
     }
   });
 
@@ -389,38 +407,21 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
 
   Groups.allow({
-    'update': function() {
-      return true;
-    },
-    'insert': function() {
-      return true;
-    },
-    'remove': function() {
-      return true;
-    }
+    'update': function() {return true;},
+    'insert': function() {return true;},
+    'remove': function() {return true;}
   });
 
   Users.allow({
-    'update': function() {
-      return true;
-    },
-    'insert': function() {
-      return true;
-    },
-    'remove': function() {
-      return true;
-    }
+    'update': function() {return true;},
+    'insert': function() {return true;},
+    'remove': function() {return true;}
   });
 
   Shifts.allow({
-    'update': function() {
-      return true;
-    },
-    'insert': function() {
-      return true;
-    },
-    'remove': function() {
-      return true;
+    'update': function() {return true;},
+    'insert': function() {return true;},
+    'remove': function() {return true;
     }
   });
   Meteor.startup(function () {
