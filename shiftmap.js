@@ -147,11 +147,16 @@ if (Meteor.isClient) {
     },*/
 
     // retrieve the current group's shifts in an array for the week
-    getDays : function () {
+    getDays : function (start) {
       var user = Users.findOne({username: currentUser()});
       var userid = user._id;
       // returns the current GROUP!
       var currentGroup = user.current;
+
+      var meridian = String(start).slice(start.length-2,start.length);
+      var time = String(start).slice(0, start.length-2);
+      var regex = time + ":[0-5][0-9]" + meridian;
+      console.log(regex)
 
       if (currentGroup == undefined) {
         currentGroup = user.groups[0].groupid;
@@ -168,7 +173,7 @@ if (Meteor.isClient) {
       var min = "pm11:59";
       
       for (i = 0; i < 7; ++i) {
-        days[i] = {oneday : Shifts.find({groupid: currentGroup, day: i+firstday}), dayOfWeek: i+firstday};
+        days[i] = {oneday : Shifts.find({groupid: currentGroup, day: i+firstday, start: {$regex: regex}}), dayOfWeek: i+firstday};
 
         shifts = days[i].oneday.fetch();
         for (j = 0; j < shifts.length; j++) {
@@ -180,9 +185,9 @@ if (Meteor.isClient) {
 
 
       } 
-      rowId = document.getElementsByClassName("hola");
-      console.log(rowId);
-      return {week: days, startHour: parseInt(min.substring(2,4))};
+
+      //return {week: days, startHour: parseInt(min.substring(2,4))};
+      return days
     }
   });
 

@@ -36,118 +36,119 @@
 <!-- TODO: Change this to make it into a calendar-->
 
 <template name = "calendar">
-  <div class="well">
-  <h2> <center> Calendar of Shifts </center> </h2> 
-  <table class="table table-bordered table-hover">
-    <thead>
-      <tr>
-        <th>  </th>
-        <th> Sunday </th>
-        <th> Monday </th>
-        <th> Tuesday </th>
-        <th> Wednesday </th>
-        <th> Thursday </th> 
-        <th> Friday </th> 
-        <th> Saturday </th> 
-      </tr>
-    </thead>
+  <div class="well" style="z-index:initial;position:fixed">
+    <h2> <center> Calendar of Shifts </center> </h2> 
+    <table class="table table-bordered table-hover;position:relative">
+      <thead>
+        <tr>
+          <th>  </th>
+          <th class="dayOfWeek"><center> Sunday </center></th>
+          <th class="dayOfWeek"><center> Monday </center></th>
+          <th class="dayOfWeek"><center> Tuesday </center></th>
+          <th class="dayOfWeek"><center> Wednesday </center></th>
+          <th class="dayOfWeek"><center> Thursday </center></th> 
+          <th class="dayOfWeek"><center> Friday </center></th> 
+          <th class="dayOfWeek"><center> Saturday </center></th> 
+        </tr>
+      </thead>
 
-    <tbody>
-            <tr>
-              <th></th>
-              {{#each getDays.week}}
-                <th>{{dayOfWeek}}</th>
-              {{/each}}
-            </tr>
-    </tbody>
+        <tbody>
+                <tr>
+                  <th></th>
+                  {{#each getDays 0}}
+                    <th>{{dayOfWeek}}</th>
+                  {{/each}}
+                </tr>
+        </tbody>
 
-    <tbody>
-      <tr class="hola"><td> 8am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr>
-      <tr><td> 9am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 10am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 11am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 12pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 1pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 2pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 3pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 4pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 5pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 6pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 7pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 8pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 9pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 10pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-      <tr><td> 11pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-    </tbody>
-
-    <td></td>
-    {{#each getDays.week}}
-      <td>{{>setDay}}</td>
-    {{/each}}
-  </table>
-</div>
-</template>
-
-<!--<template name = "calendar">
-  <div class="well">
-
-  <h2> <center> Calendar of Shifts </center> </h2> 
-  <style>
-  table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-  }
-  th, td {
-    padding: 5px;
-  }
-  </style>
-
-        <table class="table table-bordered">
-          <tbody>
-              <tr><td> 8am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr>
-              <tr><td> 9am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 10am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 11am </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 12pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 1pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 2pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 3pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 4pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 5pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 6pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 7pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 8pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 9pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 10pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-              <tr><td> 11pm </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
-          </tbody>
-      </table>
-    <div id="calendarTable">
-      <table class="table table-bordered">
-          <thead>
-            <tr>
-                  <th>Sunday</th>
-                  <th>Monday</th>
-                  <th>Tuesday</th>
-                  <th>Wednesday</th>
-                  <th>Thursday</th>
-                  <th>Friday</th>
-                  <th>Saturday</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              {{#each getDays.week}}
-                <th>{{dayOfWeek}}</th>
-              {{/each}}
-            </tr>
-          </tbody>
+        <tbody>
+          <tr><th> 8am </th> 
+          {{#each getDays "8am"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 9am </th> 
+          {{#each getDays "9am"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 10am </th> 
+          {{#each getDays "10am"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 11am </th> 
+          {{#each getDays "11am"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 12pm </th> 
+          {{#each getDays "12pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 1pm </th> 
+          {{#each getDays "1pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 2pm </th> 
+          {{#each getDays "2pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 3pm </th> 
+          {{#each getDays "3pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 4pm </th> 
+          {{#each getDays "4pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 5pm </th> 
+          {{#each getDays "5pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 6pm </th> 
+          {{#each getDays "6pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 7pm </th> 
+          {{#each getDays "7pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 8pm </th> 
+          {{#each getDays "8pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 9pm </th> 
+          {{#each getDays "9pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 10pm </th> 
+          {{#each getDays "10pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
+          <tr><th> 11pm </th> 
+          {{#each getDays "11pm"}}
+            <td> {{> setDay}} </td>
+          {{/each}}
+          </tr>
 
           
-      </table>
-    </div>-->
+        </tbody>
+    </table>
+  </div>
 
+</template>
 
 <template name = "Home">
   <div class = "container">
@@ -219,9 +220,12 @@
 <!-- Retrieve the group and its start, end, and admin --> 
 <template name="setDay">
   {{#each oneday}}
-    <button style={{mapShift start end users currentUser.profile.name}} id={{_id}}>
+
+    <button style="position:absolute;{{mapShift start end users currentUser.profile.name}}" id={{_id}}> 
       {{start}} - {{end}}
+
     </button>
+
   {{/each}}
 </template>
 
