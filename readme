@@ -18,3 +18,6 @@ Groups: {_id: string, groupname: string, employers: [{userid: string}], users: [
 // we will have to split start and end time via ":"
 Shifts: {_id: string, day: int, month: string, start: string, end: string, users: [{userid: string}], groupid: string}
 
+
+Table dimensions
+- each cell has width: 160px, height: 50px

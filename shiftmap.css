@@ -72,20 +72,27 @@ li.listForm {
   padding-bottom: 5px;
 }
 
-.table-hover {
+table {
   width: 1200px;
   margin-left:auto;
   margin-right:auto;
   left:0;
   right:0;
+  border-collapse: collapse;
 }
 
 td {
-  width:800px;
+  height:50px;
+  width:160px;
+  vertical-align:top;
 }
 
 .dayOfWeek {
-  width:800px;
+  width:160px;
+}
+
+.timeOfDay {
+  width:80px;
 }
 
 #startTime {
@@ -101,13 +108,4 @@ td {
 #capacity {
   float:left;
   padding-right:10px;
-}
-
-#timeTable {
-  float:left;
-  }
-
-#calendarTable {
-  float:left;
-  line-height: 1.7em;
 }

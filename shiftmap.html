@@ -36,9 +36,9 @@
 <!-- TODO: Change this to make it into a calendar-->
 
 <template name = "calendar">
-  <div class="well" style="z-index:initial;position:fixed">
+  <div class="well" style="z-index:initial;position:absolute">
     <h2> <center> Calendar of Shifts </center> </h2> 
-    <table class="table table-bordered table-hover;position:relative">
+    <table border="1" style="position:relative" cellspacing="0" cellpadding="0">
       <thead>
         <tr>
           <th>  </th>
@@ -56,88 +56,88 @@
                 <tr>
                   <th></th>
                   {{#each getDays 0}}
-                    <th>{{dayOfWeek}}</th>
+                    <th><center>{{dayOfWeek}}</center></th>
                   {{/each}}
                 </tr>
         </tbody>
 
         <tbody>
-          <tr><th> 8am </th> 
+          <tr><th class="timeOfDay"><center> 8am </center></th> 
           {{#each getDays "8am"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 9am </th> 
+          <tr><th class="timeOfDay"><center> 9am </center></th> 
           {{#each getDays "9am"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 10am </th> 
+          <tr><th class="timeOfDay"><center> 10am </center></th> 
           {{#each getDays "10am"}}
-            <td> {{> setDay}} </td>
+            <td style="vertical-align:top"> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 11am </th> 
+          <tr><th class="timeOfDay"><center> 11am </center></th> 
           {{#each getDays "11am"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 12pm </th> 
+          <tr><th class="timeOfDay"><center> 12pm </center></th> 
           {{#each getDays "12pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 1pm </th> 
+          <tr><th class="timeOfDay"><center> 1pm </center></th> 
           {{#each getDays "1pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 2pm </th> 
+          <tr><th class="timeOfDay"><center> 2pm </center></th> 
           {{#each getDays "2pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 3pm </th> 
+          <tr><th class="timeOfDay"><center> 3pm </center></th> 
           {{#each getDays "3pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 4pm </th> 
+          <tr><th class="timeOfDay"><center> 4pm </center></th> 
           {{#each getDays "4pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 5pm </th> 
+          <tr><th class="timeOfDay"><center> 5pm </center></th> 
           {{#each getDays "5pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 6pm </th> 
+          <tr><th class="timeOfDay"><center> 6pm </center></th> 
           {{#each getDays "6pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 7pm </th> 
+          <tr><th class="timeOfDay"><center> 7pm </center></th> 
           {{#each getDays "7pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 8pm </th> 
+          <tr><th class="timeOfDay"><center> 8pm </center></th> 
           {{#each getDays "8pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 9pm </th> 
+          <tr><th class="timeOfDay"><center> 9pm </center></th> 
           {{#each getDays "9pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 10pm </th> 
+          <tr><th class="timeOfDay"><center> 10pm </center></th> 
           {{#each getDays "10pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
           </tr>
-          <tr><th> 11pm </th> 
+          <tr><th class="timeOfDay"><center> 11pm </center></th> 
           {{#each getDays "11pm"}}
             <td> {{> setDay}} </td>
           {{/each}}
@@ -221,7 +221,7 @@
 <template name="setDay">
   {{#each oneday}}
 
-    <button style="position:absolute;{{mapShift start end users currentUser.profile.name}}" id={{_id}}> 
+    <button style="position:absolute;z-index:1;{{mapShift start end users day}}" id={{_id}}>
       {{start}} - {{end}}
 
     </button>
