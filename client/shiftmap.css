@@ -1,17 +1,9 @@
-/* CSS declarations go here */
-/*.container {
-    max-width: 600px;
-    margin: 0 auto;
-    min-height: 100%;
-}*/
-
 #header1 {
   position: fixed; 
     top: 500px; 
     left: 0; 
     width: 100%; 
 }
-
 #header1 span { 
     color: white; 
     font: bold 30px/53px Helvetica, Sans-Serif; 
@@ -20,16 +12,12 @@
     background: rgba(0, 0, 0, 0.7);
     padding: 10px; 
 }
-
 #header1 span.spacer {
   padding:0 5px;
 }
-
 .btn-lg {
   margin-top:500px;
-
 }
-
 body {
   background: url(/2064-8.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -39,8 +27,6 @@ body {
   padding-top: 150px;
   z-index:1;
 }
-
-
 .well {
   background-color: white;
   height:cover;
@@ -49,9 +35,7 @@ body {
   left:0;
   right:0;
   overflow:auto;
-
 }
-
 .delete {
   float: right;
   font-weight: bold;
@@ -60,18 +44,15 @@ body {
   border: none;
   position: relative;
 }
-
 li.listForm {
   position: relative;
   list-style: none;
   padding: 15px;
   border-bottom: #eee solid 1px;
 }
-
 .new-task input {
   padding-bottom: 5px;
 }
-
 table {
   width: 1200px;
   margin-left:auto;
@@ -81,31 +62,33 @@ table {
   border-collapse: collapse;
 }
 
+#title {
+  padding-left: 180px;
+}
+      
 td {
   height:50px;
   width:160px;
   vertical-align:top;
 }
-
 .dayOfWeek {
   width:160px;
 }
-
 .timeOfDay {
   width:80px;
 }
-
 #startTime {
   float:left;
   padding-right:20px;
 }
-
 #endTime {
   float:left;
   padding-right:20px;
 }
-
 #capacity {
   float:left;
   padding-right:10px;
 }
+  .checkbox {
+    padding-left: 10px;
+  }
