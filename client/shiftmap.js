@@ -62,6 +62,8 @@ Template.calendar.helpers({
       var id = currentUserId();
       var colVal = "";
       if (indexUser(id, users) >= 0) {
+        colVal = "green"
+      } else if (isShiftFull(shiftId)){
         colVal = "red"
       } else {
         colVal = "blue"
