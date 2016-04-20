@@ -170,13 +170,14 @@ Template.calendar.helpers({
       // 2) if the current user is not in the shift, don't offer the drop button
       // 3) if these are not the case, offer all the buttons
       content: function () {
-        let user = currentUserId();
-        if (isUserInShift(user, shiftId)) {
+        let userid = currentUserId();
+        console.log(lastshiftid);
+        if (isUserInShift(userid, lastshiftid)) {
           return $("#popover-content2").html();
         }
         else {
-          if (isShiftFull(shiftId)) {
-            return $("#popover-content2").html();
+          if (isShiftFull(lastshiftid)) {
+            return $("#popover-content1").html();
         }
           else {
             return $("#popover-content3").html();
@@ -188,9 +189,49 @@ Template.calendar.helpers({
  }    
 });
 
+ popoverInit = function (shiftId) {
+    $('[data-toggle="popover"]').popover({
+      html: true,
+      // this is to make it print out what I want
+      title: function() {
+        return $("#popover-head").html();
+      },
+      // return content based on 
+      // 1) if the capacity of the shift is full, then don't offer the add button
+      // 2) if the current user is not in the shift, don't offer the drop button
+      // 3) if these are not the case, offer all the buttons
+      content: function () {
+        let user = currentUserId();
+        
+        if (isUserInShift(user, lastshiftid)) {
+          return $("#popover-content2").html();
+        }
+        else {
+          if (isShiftFull(lastshiftid)) {
+            return $("#popover-content1").html();
+        }
+          else {
+            return $("#popover-content3").html();
+        }
+      }
+      return $("#popover-content1").html();
+    }
+  });
+}
+
 Template.setDay.events({
   'click button' : function (event) {
-    changeUserInShift(currentUserId(), event.currentTarget.id);
+    var buttonid = event.currentTarget.id;
+    lastshiftid = buttonid;
+    popoverInit(buttonid);
+    if (swapstatus) {
+      var firstperson = Shifts.find({_id: buttonid}).users[0];
+      changeUserInShift(currentUserId(), buttonid);
+      changeUserInShift(currentUserId(), swapid);
+      changeUserInShift(firstperson, buttonid);
+      changeUserInShift(firstperson, buttonid);
+    }
+    $(buttonid).popover('show');//show popover
   }
 });
 
