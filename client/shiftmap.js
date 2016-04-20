@@ -30,7 +30,7 @@ Template.calendar.helpers({
   }
 });
   // this is some confusing syntax..keeping it here for now..works only when you refresh
-Template.setDay.rendered = function() {
+/*Template.setDay.rendered = function() {
     console.log("hello");
       $('[data-toggle="popover"]').popover({
         html: true,
@@ -42,9 +42,9 @@ Template.setDay.rendered = function() {
           return $("#popover-content").html();
         } 
       });
-  }
+  }*/
 
-  Template.calendar.rendered = function() {
+  /*Template.calendar.rendered = function() {
       console.log("is this getting here1?");
       $('[data-toggle="popover"]').popover({
         html: true,
@@ -56,7 +56,7 @@ Template.setDay.rendered = function() {
           return $("#popover-content").html();
         } 
       });
-  }
+  }*/
   Template.setDay.helpers({
     mapShift : function (start, end, users, day, shiftId) {
       var id = currentUserId();
@@ -155,85 +155,7 @@ Template.setDay.rendered = function() {
       return "color:" + colVal + ";margin-top:" + topPadding + ";margin-left:" + leftPadding + ";height:" + height + ";width:" + width;
     },
     
-  /*});
-Template.setDay.helpers({
-  mapShift : function (start, end, users, day) {
-    var id = currentUserId();
-    var colVal = "";
-    if (indexUser(id, users) >= 0) {
-      colVal = "red"
-    } else {
-      colVal = "blue"
-    }
-    var startMin = String(start).charAt(start.length-4);
-    var endMin = String(end).charAt(end.length-4);
-    var startFraction = parseFloat(startMin) / 6;
-    var endFraction = parseFloat(endMin) / 6;
-
-    var startHr = parseInt(String(start).slice(0, start.length-5)) % 12;
-    var endHr = parseInt(String(end).slice(0, end.length-5)) % 12;
-
-    if (String(start).indexOf("pm") != -1) startHr += 12;
-    if (String(end).indexOf("pm") != -1) endHr += 12;
-    startHr += startFraction;
-    endHr += endFraction;
-
-    console.log("startHr: " + startHr);
-    console.log("endHr: " + endHr);
-
-    var diff = endHr - startHr;
-    if (diff < 0) diff = 24+diff;
-
-    var user = Users.findOne({username: currentUser()});
-    var currentGroup = user.current;
-    var list = [];
-
-    Shifts.find({groupid: currentGroup, day: day}).forEach(function (shift) {
-      var tempStart = shift.start
-      var tempEnd = shift.end
-
-      var tempStartMin = String(tempStart).charAt(tempStart.length-4);
-      var tempEndMin = String(tempEnd).charAt(tempEnd.length-4);
-      var tempStartFraction = parseFloat(tempStartMin) / 6;
-      var tempEndFraction = parseFloat(tempEndMin) / 6;
-
-      var tempStartHr = parseInt(String(tempStart).slice(0, tempStart.length-5)) % 12;
-      var tempEndHr = parseInt(String(tempEnd).slice(0, tempEnd.length-5)) % 12;
-
-      if (String(tempStart).indexOf("pm") != -1) tempStartHr += 12;
-      if (String(tempEnd).indexOf("pm") != -1) tempEndHr += 12;
-      tempStartHr += tempStartFraction;
-      tempEndHr += tempEndFraction;
-
-      //console.log("tempstartHr: " + tempStartHr);
-      //console.log("tempendHr: " + tempEndHr);
-      if ((tempStartHr >= startHr && tempStartHr <= endHr) || (tempEndHr >= startHr && tempEndHr <= endHr)) {
-        list.push({start: tempStartHr, end:tempEndHr});
-      }
-    });
-      
-    var currHr = startHr;
-    var counter = 0;
-    while (currHr <= endHr) {
-      var tempcounter = 0;
-      for (var i = 0; i < list.length; i++) {
-        var starttime = list[i].start;
-        var endtime = list[i].end;
-        if ((starttime >= startHr && starttime <= endHr) || (endtime >= startHr && endtime <= endHr)) {
-          tempcounter += 1
-        }
-      }
-      if (tempcounter > counter) counter = tempcounter;
-      currHr += .1;
-    }
-
-    var padding = "" + 50*startFraction + "px";
-    var height = "" + 50*diff-1 + "px";
-    var width = "" + 159/counter + "px";
-
-    return "color:" + colVal + ";margin-top:" + padding + ";height:" + height + ";width:" + "159px";
-  },*/
-  'rendered' : function() {
+  'rendered' : function(shiftId) {
     console.log("hello");
     $('[data-toggle="popover"]').popover({
       html: true,
@@ -241,12 +163,27 @@ Template.setDay.helpers({
       title: function() {
         return $("#popover-head").html();
       },
-      content: function() {
-        return $("#popover-content").html();
-      } 
-    });
- }
-    
+      // return content based on 
+      // 1) if the capacity of the shift is full, then don't offer the add button
+      // 2) if the current user is not in the shift, don't offer the drop button
+      // 3) if these are not the case, offer all the buttons
+      content: function () {
+        let user = currentUserId();
+        if (isUserInShift(user, shiftId)) {
+          return $("#popover-content2").html();
+        }
+        else {
+          if (isShiftFull(shiftId)) {
+            return $("#popover-content2").html();
+        }
+          else {
+            return $("#popover-content3").html();
+        }
+      }
+      return $("#popover-content1").html();
+    }
+  });
+ }    
 });
 
 Template.setDay.events({

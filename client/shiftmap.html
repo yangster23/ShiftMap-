@@ -186,17 +186,17 @@
 <!-- Retrieve the group and its start, end, and admin --> 
 <template name="setDay">
   {{#each oneday}}
-    {{rendered}}
     <button type="button" style="position:absolute;z-index:1;{{mapShift start end users day _id}}" id={{_id}}
         data-toggle="popover" data-html = "true" data-container = "body" data-placement = "auto-right">
      {{start}} - {{end}}
     </button>
+    {{rendered _id}}
   {{/each}}
 
   <div id = "popover-head" class = "hide">
     <b>Pick Your Action</b>
   </div>
-  <div id = "popover-content" class = "hide">
+  <div id = "popover-content1" class = "hide">
     <!-- for all these buttons we should add the respective button id's... Talk with danny and alex on how to implement this -->
     Enroll in shift: <button type="button" class="btn btn-default" aria-label="Left Align">
       <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button><br>
@@ -207,5 +207,24 @@
     Request sub : <button type="button" class="btn btn-default" aria-label="Left Align">
       <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span></button>
   </div>
+  <!-- when it's full/you're in it you shouldn't be able to add it -->
+  <div id = "popover-content2" class = "hide">
+    Drop shift : <button type="button" class="btn btn-default" aria-label="Left Align">
+      <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button><br>
+    Request swap : <button type="button" class="btn btn-default" aria-label="Left Align">
+      <span class="glyphicon glyphicon-random" aria-hidden="true"></span></button><br>
+    Request sub : <button type="button" class="btn btn-default" aria-label="Left Align">
+      <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span></button>
+  </div>
+
+  <!-- when you're not in it, you shouldn't be able to drop it -->
+  <div id = "popover-content3" class = "hide">
+    Enroll in shift: <button type="button" class="btn btn-default" aria-label="Left Align">
+      <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button><br>
+    Request swap : <button type="button" class="btn btn-default" aria-label="Left Align">
+      <span class="glyphicon glyphicon-random" aria-hidden="true"></span></button><br>
+    Request sub : <button type="button" class="btn btn-default" aria-label="Left Align">
+      <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span></button>
+  </div>  
 </template>
 
