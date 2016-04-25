@@ -1,4 +1,3 @@
-
 Employers = new Mongo.Collection(null);
 Employees = new Mongo.Collection(null);
 FormShifts = new Mongo.Collection(null);
@@ -58,7 +57,6 @@ Template.updateGroup.events({
   },
   // Pressing the update button
   'click .btn-primary'(event) {
-          
     let employers = Employers.find().fetch();
     let shifts = FormShifts.find().fetch();
     let employees = Employees.find().fetch();
@@ -77,15 +75,17 @@ Template.updateGroup.events({
       addShiftToGroup(shifts[i].start,shifts[i].end,shifts[i] .cap,
                       shifts[i].repeat,shifts[i].weekday,groupid);
     }
-    
-    
-    Employers.remove({});
-    Employees.remove({});
-    FormShifts.remove({});
+      if (Employers.find({}).count() != 0 || Employees.find({}).count() != 0 || FormShifts.find({}).count() != 0)
+      $('#myModal').modal('hide');
 
-    Router.go('/');
+      Employers.remove({});
+      Employees.remove({});
+      FormShifts.remove({});
+
+      Router.go('/');
   }
 });
+
 
 Template.updateGroup.helpers({
   employers() {
