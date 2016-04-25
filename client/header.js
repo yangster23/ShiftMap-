@@ -1,13 +1,23 @@
-
 Template.Header.helpers({
   getGroups : function (netid) {
     var user = Users.findOne({username: netid});
     // console.log(netid + ' added');
-    return user.groups;
+    let groupid = getCurrentGroupId();
+    let groups = user.groups
+    for (let i = 0; i < groups.length; i++) {
+      console.log(groups[i])
+      if (groupid == groups[i].groupid) {
+        user.groups.splice(i,1);
+      }
+    }    
+    return groups;
   },
   getGroupName : function (groupid) {
     return Groups.findOne({_id: groupid}).groupname;
-   }
+   },
+   getCurrentGroupId: function () {
+    return Users.findOne({_id: currentUserId()}).current;
+}
 });
   
 Template.Header.events({

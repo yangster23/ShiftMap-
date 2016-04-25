@@ -2,11 +2,10 @@
   <title>ShiftMap</title>
 </head>
 
-
 <template name="calendar">
   <div class="well" style="z-index:initial;position:absolute">
-    <h2 id="title"> <center> Calendar of Shifts </center> </h2> 
     {{>updateGroup}}
+    <h2 id="title"> <center> Calendar of Shifts </center> </h2> 
     <table border="1" style="position:relative" cellspacing="0" cellpadding="0">
       <thead>
         <tr>
@@ -131,38 +130,33 @@
   </div>
 </template>
 
-
 <template name="Header">
-  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/">ShiftMap</a>
-      </div>
-
-      <ul class="collapse navbar-collapse" id="main-nav">
-
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="/help"> Help </a></li>
-          <li><a href="/about-us"> About Us </a></li>
-          
-          {{#if currentUser}}
-            <li><a href="/employer-form"><button type="button" class="btn btn-default" aria-label="plus">
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-            </button></a></li>
-            {{#each getGroups currentUser.profile.name}}
-              <li><a class="groupElement" href="/" id={{ groupid }}>{{getGroupName groupid}}</a></li>
-            {{/each}}
-          {{/if}} 
-          {{> CasLogin }}
-        </ul>
-      </ul>
+  {{#if currentUser}}
+  <div id='cssmenu'>
+    <ul>
+     <li><a href='/'><span>Home</span></a></li>
+     <li><a href='/help'><span>Help</span></a></li>
+     <li><a href='/about-us'><span>About Us</span></a></li>
+    <li class="groupList">
+    <button type="button" class="group"><a href='#'>{{getGroupName getCurrentGroupId}}</a></button> 
+    <div id="myDropdownGroup" class="dropdown-content">
+      {{#if currentUser}}
+        {{#each getGroups currentUser.profile.name}}
+        <a class="groupElement" href="/" id={{ groupid }}>{{getGroupName groupid}}</a>
+        {{/each}}
+        <a href='employer-form'><span>+ New Group</span></a>
+      {{/if}}
     </div>
-  </nav>
+    </li>
+     {{> CasLogin }}
+   </ul>
+ </div>
+ {{/if}}
 </template>
 
 <template name="Layout">
-  {{> Header}}
+  {{> Header}} 
+  <div id="space"></div>
   <div class="container">
     {{> yield}}
   </div>
@@ -170,16 +164,12 @@
 
 <template name="CasLogin">
   {{#if currentUser}}
-
-    <li class="dropdown">
-      <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ currentUser.profile.name }}<b class="caret"></b></a>
-      <ul class="dropdown-menu" role="menu">
-        <li><a href="#" class="btn cas-logout">Logout</a></li>
-      </ul>
-    </li>
-
-  {{else}}
-    <li><a href="#" class="navbar-link cas-login">Login</a></li>
+  <li class="last"> 
+    <button type = "button" class="logout"><a href='#'>{{currentUser.profile.name}}</a></button>
+    <div id="myDropdown" class="dropdown-content">
+      <a href="#" class="btn cas-logout">Logout</a>
+    </div>
+  </li>
   {{/if}}
 </template>
 
