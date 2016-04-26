@@ -1,4 +1,6 @@
 <template name="updateGroup">
+  
+
   <button type="button" class="btn btn-info btn-default" data-toggle="modal" data-target="#myModal" style="float: right">Update Group</button>
   <!-- Modal -->
   <div class="modal modal-fullscreen fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -12,95 +14,89 @@
         </div>
 
         <div class="modal-body">
-         <form class="new-employer">
-          <div class="form-group">
-            <label for="inputEmployer">New Employer</label>
-            <input type="text" class="form-control" name="text" id="employer" placeholder= "Type to add new employer">
-          </div>
-        </form>
+          <form class="new-employer">
+            <div class="form-group">
+              <label for="inputEmployer">New Employer</label>
+              <input type="text" class="form-control" name="text" id="employer" placeholder= "Type to add new employer">
+            </div>
+          </form>
 
-        <table class = "table table-hover">
-          <tbody>
-            {{#each employers}}
-            <tr>{{> employer}}</tr>
-            {{/each}}
-          </tbody>
-        </table>
+          <table class = "table table-hover">
+            <tbody>
+              {{#each employers}}
+                <tr>{{> employer}}</tr>
+              {{/each}}
+            </tbody>
+          </table>
 
-        <form class="new-employee">
-          <div class="form-group">
-            <label for="inputEmployee">New Employee</label>
-            <input type="text" class="form-control" name="text" id="employee" placeholder= "Type to add new employee">
-          </div>
-        </form>
+          <form class="new-employee">
+            <div class="form-group">
+              <label for="inputEmployee">New Employee</label>
+              <input type="text" class="form-control" name="text" id="employee" placeholder= "Type to add new employee">
+            </div>
+          </form>
 
-        <table class = "table table-hover">
-          <tbody>
-            {{#each employees}}
-            <tr>{{> employee}}</tr>
-            {{/each}}
-          </tbody>
-        </table>  
+          <table class = "table table-hover">
+            <tbody>
+              {{#each employees}}
+                <tr>{{> employee}}</tr>
+              {{/each}}
+            </tbody>
+          </table>  
 
-        <form class="form-inline">
-          <div class="bigcontainer">
-          <div class="form-group">
-           <div id="startTime">
-            <label class="sr-only" for="inputStartTime">Start</label>
-            <input type="text" class="form-control" name="start" placeholder=" Start Time"/> 
-          </div>
+          <form class="form-inline">
+            <div class="bigcontainer">
+              <div class="form-group">
+                <div id="startTime">
+                  <label class="sr-only" for="inputStartTime">Start</label>
+                  <input type="text" class="form-control" name="start" placeholder=" Start Time"/> 
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div id="endTime">
+                  <label class="sr-only" for="inputEndTime">End</label>
+                  <input type="text" class="form-control" name="end" placeholder="End Time"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div id="capacity">
+                  <label class="sr-only" for="inputCapacity">Capacity</label>
+                  <input type="text" class="form-control" name="capacity" placeholder="Capacity"/>
+                </div>
+              </div>
+               
+              <input type="text" class="form-control" id="datepicker" placeholder="Date: dd/mm/yyyy">
+             
+              <div class="checkbox">
+                <label>
+                  <input id="repeat" type="checkbox"> Repeat Weekly
+                </label>
+              </div>
+               
+              <br> <br>
+              <button type="submit" class="btn btn-default">Add Shift</button>
+            </div>
+          </form>
+          <br>
+          
+          <table class = "table table-hover">
+            <tbody>
+              {{#each formShifts}}
+                <tr>{{> shift}}</tr>
+              {{/each}}
+            </tbody>
+          </table> 
         </div>
 
-        <div class="form-group">
-          <div id="endTime">
-            <label class="sr-only" for="inputEndTime">End</label>
-            <input type="text" class="form-control" name="end" placeholder="End Time"/>
-          </div>
-        </div>
-
-        <div class="form-group">
-         <div id="capacity">
-          <label class="sr-only" for="inputCapacity">Capacity</label>
-          <input type="text" class="form-control" name="capacity" placeholder="Capacity"/>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="modalSubmit">Update</button>
         </div>
       </div>
-    <select id="option_dropDown" class="form-control">
-    <option value="Sunday">Sunday</option>
-    <option value="Monday">Monday</option>
-    <option value="Tuesday">Tuesday</option>
-    <option value="Wednesday">Wednesday</option>
-    <option value="Thursday">Thursday</option>
-    <option value="Friday">Friday</option>
-    <option value="Saturday">Saturday</option>
-</select>
-     <div class="checkbox">
-      <label>
-        <input id="repeat" type="checkbox"> Repeat Weekly
-      </label>
     </div>
-
-
-      <br> <br>
-  <button type="submit" class="btn btn-default">Add Shift</button>
-      </div>
-    </form>
-    <br>
-  <table class = "table table-hover">
-   <tbody>
-    {{#each formShifts}}
-    <tr>{{> shift}}</tr>
-    {{/each}}
-  </tbody>
-</table> 
-</div>
-
-<div class="modal-footer">
-  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-  <button type="submit" class="btn btn-primary" id="modalSubmit">Update</button>
-</div>
-</div>
-</div>
-</div>
+  </div>
 </template>
 
 <template name="employer">

@@ -1,3 +1,4 @@
+
 Employers = new Mongo.Collection(null);
 Employees = new Mongo.Collection(null);
 FormShifts = new Mongo.Collection(null);
@@ -40,23 +41,24 @@ Template.updateGroup.events({
     let start = event.target.start.value;
     let end = event.target.end.value;
     let capacity = event.target.capacity.value;
-
-    let getValue = document.getElementById("option_dropDown");
-    let weekday = getValue.options[getValue.selectedIndex].value; 
+    let date = document.getElementById("datepicker").value;
+     
     let repeat = document.getElementById("repeat").checked;
 
     var re = "^(0|1)?[0-9]:[0-5][0-9](am|pm)$";
 
     if (start.match(re) != null && end.match(re) != null && parseInt(capacity) > 0) {
-      FormShifts.insert({"start": start, "end": end, "capacity": capacity, "weekday": weekday, "repeat": repeat});
+      FormShifts.insert({"start": start, "end": end, "capacity": capacity, "date": date, "repeat": repeat});
     }
 
     event.target.start.value = '';
     event.target.end.value = '';
     event.target.capacity.value = '';
+    
   },
   // Pressing the update button
   'click .btn-primary'(event) {
+          
     let employers = Employers.find().fetch();
     let shifts = FormShifts.find().fetch();
     let employees = Employees.find().fetch();
@@ -72,30 +74,41 @@ Template.updateGroup.events({
     }
 
     for (let i = 0; i < shifts.length; i++) {
-      addShiftToGroup(shifts[i].start,shifts[i].end,shifts[i] .cap,
-                      shifts[i].repeat,shifts[i].weekday,groupid);
+      addShift(shifts[i],groupid);
     }
-      if (Employers.find({}).count() != 0 || Employees.find({}).count() != 0 || FormShifts.find({}).count() != 0)
+    if (Employers.find({}).count() != 0 || 
+        Employees.find({}).count() != 0 || 
+        FormShifts.find({}).count() != 0) {
       $('#myModal').modal('hide');
+    }
+    
+    Employers.remove({});
+    Employees.remove({});
+    FormShifts.remove({});
 
-      Employers.remove({});
-      Employees.remove({});
-      FormShifts.remove({});
-
-      Router.go('/');
+    Router.go('/');
   }
 });
 
+Template.updateGroup.rendered=function() {
+  $('#datepicker').datepicker({
+    dateFormat: "dd/mm/yyyy"
+  });
+};
+
 
 Template.updateGroup.helpers({
-  employers() {
+  employers: function () {
     return Employers.find({});
   },
-  employees() {
+  employees: function () {
     return Employees.find({});
   },
-  formShifts() {
+  formShifts: function() {
     return FormShifts.find({});
+  },
+  repeat: function() {
+    return document.getElementById("repeat").checked;
   }
 }); 
 
