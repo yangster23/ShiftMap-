@@ -2,21 +2,40 @@ lastshiftid = "";
 swapid = "";
 swapstatus = false;
 $(document).on("click", "#enrollButton", function (event) {
- 	changeUserInShift(currentUserId(), lastshiftid);
- 	console.log(lastshiftid);
- 	$(lastshiftid).popover('hide');
+	var fc = $('.fc');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	fc.fullCalendar('refetchEvents');
+
+ 	addUserToShift(currentUserId(), lastshiftid);
  });
 $(document).on("click", "#dropButton", function () {
-	changeUserInShift(currentUserId(), lastshiftid);
-	$(lastshiftid).popover('hide');
+	var fc = $('.fc');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	removeUserFromShift(currentUserId(), lastshiftid);
 });
 $(document).on("click", "#swapButton", function () {
+	var fc = $('.fc');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	fc.fullCalendar('refetchEvents');
+
 	swapid = lastshiftid;
 	swapstatus = true;
-	$(lastshiftid).popover('hide');
 	alert("Select shifts that you would like to swap with...");
 });
 $(document).on("click", "#subButton", function () {
-  console.log("sub");
-  $(lastshiftid).popover('hide');
+  	var fc = $('.fc');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	fc.fullCalendar('refetchEvents');
+});
+$(document).on("click", "#deleteShift", function () {
+  	var fc = $('.fc');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	fc.fullCalendar('refetchEvents');
+
+	Shifts.remove({'_id':lastshiftid});
+});
+$(document).on("click", "#currGroup", function () {
+  	var fc = $('.fc');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	fc.fullCalendar('refetchEvents');
 });

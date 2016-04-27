@@ -21,3 +21,9 @@ Shifts: {_id: string, day: int, month: string, start: string, end: string, users
 
 Table dimensions
 - each cell has width: 160px, height: 50px
+
+
+addform.js: create new group
+caslogin.js: CAS authentication
+clickpopover.js: event function for clicking popover options
+updategroup.js: update existing group

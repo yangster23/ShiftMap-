@@ -1,4 +1,3 @@
-
 Template.Home.events({
   'click .caslogin': function(e) {
     e.preventDefault();
@@ -8,5 +7,11 @@ Template.Home.events({
     Meteor.loginWithCas([callback]);
     return false;
   }
+});
+
+Template.Home.helpers({
+	hasGroups: function() {
+		return getCurrentGroupId();
+	}
 });
 

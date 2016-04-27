@@ -17,7 +17,16 @@ Template.Header.helpers({
    },
    getCurrentGroupId: function () {
     return Users.findOne({_id: currentUserId()}).current;
-}
+  },
+  getNotificationCount : function () {
+    return getCurrentNotifications().length;
+  },
+  getGroupHeader: function () {
+    if (Users.findOne({_id: currentUserId()}).current == null)
+      return "No Current Groups";
+    else 
+      return Groups.findOne({_id: getCurrentGroupId()}).groupname;
+  }
 });
   
 Template.Header.events({
@@ -25,19 +34,6 @@ Template.Header.events({
     let id = event.currentTarget.id;
     let userid = currentUserId();
     Users.update({_id: userid}, {$set: {current: id}});
-  },
-  rendered: function() {
-    console.log("is this even getting called?");
-    $('[data-toggle="popover"]').popover({
-      html: true,
-      // this is to make it print out what I want
-      title: function() {
-        return $("#popover-head").html();
-      },
-      content: function() {
-        return $("#popover-content").html();
-      } 
-    });
   }
 });
 

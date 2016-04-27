@@ -3,130 +3,88 @@
 </head>
 
 <template name="calendar">
-  <div class="well" style="z-index:initial;position:absolute">
-    {{>updateGroup}}
-    <h2 id="title"> <center> Calendar of Shifts </center> </h2> 
-    <table border="1" style="position:relative" cellspacing="0" cellpadding="0">
-      <thead>
-        <tr>
-          <th>  </th>
-          <th class="dayOfWeek"><center> Sunday </center></th>
-          <th class="dayOfWeek"><center> Monday </center></th>
-          <th class="dayOfWeek"><center> Tuesday </center></th>
-          <th class="dayOfWeek"><center> Wednesday </center></th>
-          <th class="dayOfWeek"><center> Thursday </center></th> 
-          <th class="dayOfWeek"><center> Friday </center></th> 
-          <th class="dayOfWeek"><center> Saturday </center></th> 
-        </tr>
-      </thead>
+    <div class="well">
+      {{>updateGroup}}
+      {{> fullcalendar
+          class="mainCalendar"
+          defaultView='agendaWeek'
+          height="auto"
+          events=events
+          header=setCalHeader
+          eventClick=onEventClicked
+          eventRender=onEventRender
+          allDaySlot=false
+          minTime="08:00"
+          maxTime="24:00"
+          displayEventTime=true
+          timeFormat="H:mm"
+      }}
 
-        <tbody>
-                <tr>
-                  <th></th>
-                  {{#each getDays 0}}
-                    <th><center>{{dayOfWeek}}</center></th>
-                  {{/each}}
-                </tr>
-        </tbody>
+      <div id = "popover-head" class="hide">
+        <b>Pick Your Action</b>
+      </div>
+      <div id = "popover-content1" class="hide">
+        <!-- for all these buttons we should add the respective button id's... Talk with danny and alex on how to implement this -->
+      </div>
+      <div id = "employer-popover-content1" class="hide">
+        <!-- for all these buttons we should add the respective button id's... Talk with danny and alex on how to implement this -->
+          Delete this shift permanently: <button id="deleteShift" class="btn btn-default" aria-label="Left Align">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+      </div>
 
-        <tbody>
-          <tr><th class="timeOfDay"><center> 8am </center></th> 
-          {{#each getDays "8am"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 9am </center></th> 
-          {{#each getDays "9am"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 10am </center></th> 
-          {{#each getDays "10am"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 11am </center></th> 
-          {{#each getDays "11am"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 12pm </center></th> 
-          {{#each getDays "12pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 1pm </center></th> 
-          {{#each getDays "1pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 2pm </center></th> 
-          {{#each getDays "2pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 3pm </center></th> 
-          {{#each getDays "3pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 4pm </center></th> 
-          {{#each getDays "4pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 5pm </center></th> 
-          {{#each getDays "5pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 6pm </center></th> 
-          {{#each getDays "6pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 7pm </center></th> 
-          {{#each getDays "7pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 8pm </center></th> 
-          {{#each getDays "8pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 9pm </center></th> 
-          {{#each getDays "9pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 10pm </center></th> 
-          {{#each getDays "10pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
-          <tr><th class="timeOfDay"><center> 11pm </center></th> 
-          {{#each getDays "11pm"}}
-            <td> {{> setDay}} </td>
-          {{/each}}
-          </tr>
+      <!-- when it's full/you're in it you shouldn't be able to add it -->
+      <div id = "popover-content2" class="hide">
+        Drop shift: <button id="dropButton" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button><br>
+        Request swap: <button id="swapButton" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-random" aria-hidden="true"></span></button><br>
+        Request sub: <button id="subButton" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span></button>
+      </div>
+      <div id = "employer-popover-content2" class="hide">
+        Drop shift: <button id="dropButton" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button><br>
+        Request swap: <button id="swapButton" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-random" aria-hidden="true"></span></button><br>
+        Request sub: <button id="subButton" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span></button><br>
+        Delete this shift permanently: <button id="deleteShift" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+      </div>
 
-          
-        </tbody>
-    </table>
+      <!-- when you're not in it, you shouldn't be able to drop it -->
+      <div id = "popover-content3" class="hide">
+        Enroll in shift: <button id="enrollButton" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button><br>
+      </div> 
+      <div id = "employer-popover-content3" class="hide">
+        Enroll in shift: <button id="enrollButton" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button><br>
+        Delete this shift permanently: <button id="deleteShift" class="btn btn-default" aria-label="Left Align">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+      </div>  
   </div>
-
 </template>
 
 <template name = "Home">
   <div class = "container">
   {{#if currentUser}}
+    {{#if hasGroups}}
       {{> calendar}}
+    {{else}}
+      {{> emptyGroup}}
+    {{/if}}
   {{else}}
       <h2 id = "header1"><span>ShiftMap:<span class='spacer'></span><br /><span class='spacer'></span>The time for those annoying emails to request a shift has ended</span></h2>
       <!--<h2 id="header2"><a href="/calendar" >login</a></h2>-->
       <center><a href="#" class="caslogin"><button type="button" class="btn btn-primary btn-lg"> Login </button></a></center>
   {{/if}}
+  </div>
+</template>
+
+<template name= "emptyGroup">
+  <div class="well">
+    <h3 id="emptyGroupHeader"><center>Whoops, no current groups! Looks like you need to add a new group...</center></h3>
   </div>
 </template>
 
@@ -138,7 +96,7 @@
      <li><a href='/help'><span>Help</span></a></li>
      <li><a href='/about-us'><span>About Us</span></a></li>
     <li class="groupList">
-    <button type="button" class="group"><a href='#'>{{getGroupName getCurrentGroupId}}</a></button> 
+    <button id="currGroup" type="button" class="group"><a href='#'>{{getGroupHeader}}</a></button> 
     <div id="myDropdownGroup" class="dropdown-content">
       {{#if currentUser}}
         {{#each getGroups currentUser.profile.name}}
@@ -148,6 +106,7 @@
       {{/if}}
     </div>
     </li>
+    <li><a href='/notifications'><span>Notifications {{getNotificationCount currentUser.profile.name}}</span></a></li>
      {{> CasLogin }}
    </ul>
  </div>
@@ -173,37 +132,5 @@
   {{/if}}
 </template>
 
-<!-- Retrieve the group and its start, end, and admin --> 
-<template name="setDay">
-  {{#each oneday}}
-    <button type="button" style="position:absolute;z-index:1;{{mapShift start end users day _id}}" id={{_id}}
-        data-toggle="popover" data-html = "true" data-container = "body" data-placement = "auto-right">
-     {{start}} - {{end}}
-    </button>
-    {{rendered _id}}
-  {{/each}}
 
-  <div id = "popover-head" class = "hide">
-    <b>Pick Your Action</b>
-  </div>
-  <div id = "popover-content1" class = "hide">
-    <!-- for all these buttons we should add the respective button id's... Talk with danny and alex on how to implement this -->
-  </div>
-  <!-- when it's full/you're in it you shouldn't be able to add it -->
-  <div id = "popover-content2" class = "hide">
-    Drop shift : <button id="dropButton" type="button" class="btn btn-default" aria-label="Left Align">
-      <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button><br>
-    Request swap : <button id="swapButton" type="button" class="btn btn-default" aria-label="Left Align">
-      <span class="glyphicon glyphicon-random" aria-hidden="true"></span></button><br>
-    Request sub : <button id="subButton" type="button" class="btn btn-default" aria-label="Left Align">
-      <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span></button>
-  </div>
-
-  <!-- when you're not in it, you shouldn't be able to drop it -->
-  <div id = "popover-content3" class = "hide">
-    Enroll in shift: <button id="enrollButton" type="button" class="btn btn-default" aria-label="Left Align">
-      <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button><br>
-  </div>  
-
-</template>
 

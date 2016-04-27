@@ -1,6 +1,5 @@
 Template.addForm.events({
   'click .btn-primary' (event) {
-    console.log('hello');
     event.preventDefault();
 
     let groupname = document.getElementById('inputEmployment').value;
@@ -11,6 +10,7 @@ Template.addForm.events({
                                  'users':[],
                                  'employers':[]});
     addEmployerToGroup(currentUserId(),groupid);
+    setCurrentGroup(groupid); 
     Router.go('/');
   }
 });

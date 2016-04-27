@@ -1,4 +1,3 @@
-
 Employers = new Mongo.Collection(null);
 Employees = new Mongo.Collection(null);
 FormShifts = new Mongo.Collection(null);
@@ -42,7 +41,7 @@ Template.updateGroup.events({
     let end = event.target.end.value;
     let capacity = event.target.capacity.value;
     let date = document.getElementById("datepicker").value;
-     
+
     let repeat = document.getElementById("repeat").checked;
 
     var re = "^(0|1)?[0-9]:[0-5][0-9](am|pm)$";
@@ -54,7 +53,6 @@ Template.updateGroup.events({
     event.target.start.value = '';
     event.target.end.value = '';
     event.target.capacity.value = '';
-    
   },
   // Pressing the update button
   'click .btn-primary'(event) {
@@ -74,6 +72,8 @@ Template.updateGroup.events({
     }
 
     for (let i = 0; i < shifts.length; i++) {
+      shifts[i].start = formatTime(shifts[i].start);
+      shifts[i].end = formatTime(shifts[i].end);
       addShift(shifts[i],groupid);
     }
     if (Employers.find({}).count() != 0 || 
@@ -96,19 +96,15 @@ Template.updateGroup.rendered=function() {
   });
 };
 
-
 Template.updateGroup.helpers({
-  employers: function () {
+  employers() {
     return Employers.find({});
   },
-  employees: function () {
+  employees() {
     return Employees.find({});
   },
-  formShifts: function() {
+  formShifts() {
     return FormShifts.find({});
-  },
-  repeat: function() {
-    return document.getElementById("repeat").checked;
   }
 }); 
 

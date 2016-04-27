@@ -1,0 +1,32 @@
+<!-- if there are notifications, it lists them. If not, it shows that there are no notifications -->
+<template name = "notifications">
+	<div class="well">
+		<center><h2> Notifications </h2></center>
+		{{#if zeroNotification}}
+			{{> noNotification}}
+		{{else}}
+			{{#each getNotifications}}
+				{{> notification}}
+			{{/each}}
+		{{/if}}
+	</div>
+</template>
+
+<!-- buttons for each notification -->
+<template name = "notification">
+	<div id = "notificationlist">
+		<li>
+			Request: <b>{{type}}</b> for {{date}} {{start}} - {{end}} 
+			<button type = "button" id = {{_id}} class = "btn btn-success">
+				ACCEPT 
+			</button>
+			<button type = "button" id = {{_id}} class = "btn btn-danger">
+				DECLINE
+			</button>
+		</li>
+	</div>
+</template>
+
+<template name = "noNotification">
+You currently have no notifications!
+</template>

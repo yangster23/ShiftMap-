@@ -2,8 +2,8 @@
 @import url(http://fonts.googleapis.com/css?family=Lato); 
 
 #header1 {
-  position: fixed; 
-    top: 500px; 
+    position: fixed; 
+    top: 480px; 
     left: 0; 
     width: 100%; 
 }
@@ -20,8 +20,39 @@
 }
 .btn-lg {
   margin-top:560px;
+  position: relative;
 }
 
+#about_us {
+    font-family: 'Lato', sans-serif;
+}
+
+#emptyGroupHeader {
+  font-family: 'Lato', sans-serif;
+}
+#about_us_title {
+    font-family: 'Lato', sans-serif;
+}
+
+#meet_team {
+      font-family: 'Lato', sans-serif;
+      padding-bottom: 30px;
+}
+div.item {
+    vertical-align: top;
+    display: inline-block;
+    text-align: center;
+}
+img {
+    width: 204px;
+    height: 204px;
+}
+.caption {
+    font-family: 'Lato', sans-serif;
+    font-size: 150%;
+    display: block;
+    padding-top: 10px
+}
 body {
   background: url(/fall.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -61,31 +92,14 @@ li.listForm {
 .new-task input {
   padding-bottom: 5px;
 }
-table {
-  width: 1200px;
-  margin-left:auto;
-  margin-right:auto;
-  left:0;
-  right:0;
-  border-collapse: collapse;
-}
+
 
 #title {
   font-family: 'Open Sans', sans-serif;
   font-size: 40px;
 }
       
-td {
-  height:50px;
-  width:160px;
-  vertical-align:top;
-}
-.dayOfWeek {
-  width:160px;
-}
-.timeOfDay {
-  width:80px;
-}
+
 #startTime {
   float:left;
   padding-right:20px;
@@ -155,6 +169,8 @@ td {
   -ms-transition: color .25s;
   -o-transition: color .25s;
   transition: color .25s;
+  z-index:1000;
+
 }
 #cssmenu ul li a:hover {
   color: #333333;
@@ -300,17 +316,54 @@ td {
 
 /* Links inside the dropdown */
 .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
+  z-index:1000;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: inline-block;
+  background-color: #f96e5b;
+  position: relative;
 }
 
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #f96e5b}
 
-/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {display:block; z-index:5;position:absolute}
+.groupList:hover .dropdown-content {
+  display: inline-block;
+}
+.last:hover .dropdown-content{
+  display: inline-block;
+}
+
+/* Notifications */
+#notificationlist li {
+  margin: 20px 0;
+}
+
+/* full calendar */
+.fc-unthemed .fc-today {
+  background:white;
+}
+
+.popover {
+      width: 140px;
+  }
+/* Popover Header */
+.popover-title {
+    background-color: #F75D59; 
+    color: #FFFFFF; 
+    font-size: 15px;
+    text-align:center;
+}
+/* Popover Body */
+.popover-content {
+    font-size: 12px;
+    background-color: coral;
+    color: #FFFFFF;
+}
+
 .datepicker table {
   width: 100px;
 }
+
+

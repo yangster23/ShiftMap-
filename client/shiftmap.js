@@ -1,7 +1,10 @@
- 
-Template.calendar.helpers({
+ /* used for closing popovers appropriately*/
+ prevEvent = null;
+ eventCounter = 0;
+
+ Template.calendar.helpers({
   // retrieve the current group's shifts in an array for the week
-  getDays : function (start) {
+  /*getDays : function (start) {
     let user = Users.findOne({username: currentUser()});
     let userid = user._id;
     let currentGroup = user.current;
@@ -27,8 +30,198 @@ Template.calendar.helpers({
       days[i] = {oneday : Shifts.find({groupid: currentGroup, day: i+firstday, start: {$regex: regex}}), dayOfWeek: i+firstday};
     } 
     return days
+  },*/
+  events: function () {
+    var fc = $('.fc');
+    return function (start, end, tz, callback) {
+      let user = Users.findOne({username: currentUser()});
+      let userid = user._id;
+      let currentGroup = user.current;
+      var events;
+      var secondEvent;
+
+      if (currentGroup == undefined) {
+        currentGroup = user.groups[0].groupid;
+        if (currentGroup == undefined) {
+          events = [];
+        }
+        setCurrentGroup(currentGroup);
+      }
+      console.log("id: " + currentGroup);
+
+      events = Shifts.find({groupid: currentGroup}).map(function (it) {
+          var starttime = String(it.start)
+          var endtime = String(it.end)
+          var id = currentUserId();
+          var colVal = "";
+
+          if (indexUser(id, it.users) >= 0) {
+            colVal = "green"
+          } else if (isShiftFull(it._id)){
+            colVal = "red"
+          } else {
+            colVal = "blue"
+          }
+
+          if (it.date) {
+            return {
+              start: formatDate(it.date) + "T" + starttime,
+              end: formatDate(it.date) + "T" + endtime,
+              _id: it._id,
+              color: colVal
+            };
+          }
+          else {
+            return {
+              start: "2016-04-26T" + starttime,
+              end: "2016-04-26T" + endtime,
+              _id: it._id,
+              color: colVal,
+              dow: [parseInt(it.weekday)]
+            };
+          }
+
+          return {
+          //title: it.date.toISOString(),
+            //start: it.start,
+            //end: it.end,
+
+            start: "2016-04-24T" + starttime,
+            end: "2016-04-24T" + endtime,
+            _id: it._id,
+            color:colVal,
+            dow: [1, 4]
+          };
+      });
+      callback(events);
+      callback(secondEvent);
+      fc.fullCalendar('refetchEvents');
+      console.log("calling rerender")
+      fc.fullCalendar('rerenderEvents');
+    };
+  },
+  setCalHeader() {
+    return {
+      left: 'prev,next today',
+      center: '',
+      right: ''
+    }
+  },
+  onEventClicked: function() {
+    var user = Users.findOne({username: currentUser()});
+    var userid = user._id;
+    let currentGroup = user.current;
+    var group = Groups.findOne({_id: currentGroup});
+    var employers = group.employers;
+    return function(calEvent, jsEvent, view) {
+        var fc = $('.fc');
+        var buttonid = calEvent._id;
+        lastshiftid = buttonid;
+        if (swapstatus) {
+          var firstperson = Shifts.find({_id: buttonid}).users[0];
+          addUserToShift(currentUserId(), buttonid);
+          removeUserFromShift(currentUserId(), swapid);
+          removeUserFromShift(firstperson, buttonid);
+          addUserToShift(firstperson, swapid);
+        }
+        if (indexUser(userid, employers) == -1) {
+          $(this).popover({
+              html: true,
+              placement: 'right',
+              title: function() {
+                  return $("#popover-head").html();
+              },
+              content: function() {
+                  let user = currentUserId();
+          
+                  if (isUserInShift(user, lastshiftid)) {
+                    return $("#popover-content2").html();
+                  }
+                  else {
+                    if (isShiftFull(lastshiftid)) {
+                      return $("#popover-content1").html();
+                    }
+                    else {
+                      return $("#popover-content3").html();
+                   }
+                  }
+                return $("#popover-content1").html();
+              }
+          });
+        }
+        else {
+          $(this).popover({
+              html: true,
+              placement: 'right',
+              title: function() {
+                  return $("#popover-head").html();
+              },
+              content: function() {
+                  let user = currentUserId();
+          
+                  if (isUserInShift(user, lastshiftid)) {
+                    return $("#employer-popover-content2").html();
+                  }
+                  else {
+                    if (isShiftFull(lastshiftid)) {
+                      return $("#employer-popover-content1").html();
+                    }
+                    else {
+                      return $("#employer-popover-content3").html();
+                   }
+                  }
+                return $("#employer-popover-content1").html();
+              }
+          });
+        }
+        if (prevEvent == calEvent) {
+          console.log("hello");
+          console.log(eventCounter);
+          if (eventCounter == 0) {
+            $(this).popover('show');
+            eventCounter = 1;
+          }
+          else {
+            console.log("setting to 0");
+            $(this).popover('destroy');
+            eventCounter = 0;
+            console.log(eventCounter);
+          }
+        }
+        else {  
+          $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").not(this).popover('destroy');
+          $(this).popover('show');
+          eventCounter = 1;
+        }
+        prevEvent = calEvent;
+
+       /* console.log(calEvent.counter);
+        if (calEvent.counter % 2 == 0) {
+          $(this).popover('show');
+          calEvent.counter += 1;
+        }
+        else {
+          $(this).popover('destroy');
+          calEvent.counter = 0;
+        }*/
+    }
   }
 });
+
+  Template.calendar.rendered = function () {
+    // find id of full calendar
+    var fc = this.$('.fc');
+    //
+    this.autorun(function () {
+        //1) trigger event re-rendering when the collection is changed in any way
+        //2) find all, because we've already subscribed to a specific range
+        Shifts.find();
+        fc.fullCalendar('refetchEvents');
+    });
+    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('destroy');
+
+  };
+
   // this is some confusing syntax..keeping it here for now..works only when you refresh
 /*Template.setDay.rendered = function() {
     console.log("hello");
@@ -57,7 +250,7 @@ Template.calendar.helpers({
         } 
       });
   }*/
-  Template.setDay.helpers({
+  /*Template.setDay.helpers({
     mapShift : function (start, end, users, day, shiftId) {
       var id = currentUserId();
       var colVal = "";
@@ -217,9 +410,9 @@ Template.calendar.helpers({
       return $("#popover-content1").html();
     }
   });
-}
+}*/
 
-Template.setDay.events({
+/*Template.setDay.events({
   'click button' : function (event) {
     var buttonid = event.currentTarget.id;
     lastshiftid = buttonid;
@@ -233,5 +426,5 @@ Template.setDay.events({
     }
     $(buttonid).popover('show');//show popover
   }
-});
+});*/
 
