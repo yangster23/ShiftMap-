@@ -6,17 +6,66 @@
 			{{> noNotification}}
 		{{else}}
 			{{#each getNotifications}}
-				{{> notification}}
+				{{#if existAcceptID acceptID}}
+					{{#if isSub type}}
+						{{> subRequestResponse}}
+					{{else}}
+						{{> swapRequestResponse}}
+					{{/if}}
+				{{else}}
+					{{#if isSub type}}
+						{{> subNotification}}
+					{{else}}
+						{{> swapNotification}}
+					{{/if}}
+				{{/if}}
 			{{/each}}
 		{{/if}}
 	</div>
 </template>
 
-<!-- buttons for each notification -->
-<template name = "notification">
+<template name = "subRequestResponse">
 	<div id = "notificationlist">
 		<li>
-			Request: <b>{{type}}</b> for {{date}} {{start}} - {{end}} 
+			Accepted Request: <b>{{userId acceptID}}</b> has accepted <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} 
+			<button type = "button" id = {{_id}} class = "btn btn-danger">
+				OK
+			</button>
+		</li>
+	</div>
+</template>
+
+<template name = "swapRequestResponse">
+	<div id = "notificationlist">
+		<li>
+			Accepted Request: <b>{{userId acceptID}}</b> has accepted <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} with {{swapdate}} {{startout}} - {{endout}}
+			<button type = "button" id = {{_id}} class = "btn btn-danger">
+				OK
+			</button>
+		</li>
+	</div>
+</template>
+
+<!-- buttons for sub notification -->
+<template name = "subNotification">
+	<div id = "notificationlist">
+		<li>
+			Request: <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} 
+			<button type = "button" id = {{_id}} class = "btn btn-success">
+				ACCEPT 
+			</button>
+			<button type = "button" id = {{_id}} class = "btn btn-danger">
+				DECLINE
+			</button>
+		</li>
+	</div>
+</template>
+
+<!-- buttons for swap notification -->
+<template name="swapNotification">
+	<div id = "notificationlist">
+		<li>
+			Request: <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} with {{swapdate}} {{startout}} - {{endout}} 
 			<button type = "button" id = {{_id}} class = "btn btn-success">
 				ACCEPT 
 			</button>

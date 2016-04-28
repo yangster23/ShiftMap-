@@ -41,18 +41,18 @@ Template.updateGroup.events({
     let end = event.target.end.value;
     let capacity = event.target.capacity.value;
     let date = document.getElementById("datepicker").value;
+    console.log(date);
 
     let repeat = document.getElementById("repeat").checked;
 
     var re = "^(0|1)?[0-9]:[0-5][0-9](am|pm)$";
 
-    if (start.match(re) != null && end.match(re) != null && parseInt(capacity) > 0) {
+    if (start.match(re) != null && end.match(re) != null && parseInt(capacity) > 0 && date != "") {
       FormShifts.insert({"start": start, "end": end, "capacity": capacity, "date": date, "repeat": repeat});
+      event.target.start.value = '';
+      event.target.end.value = '';
+      event.target.capacity.value = '';
     }
-
-    event.target.start.value = '';
-    event.target.end.value = '';
-    event.target.capacity.value = '';
   },
   // Pressing the update button
   'click .btn-primary'(event) {

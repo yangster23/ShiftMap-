@@ -56,12 +56,28 @@
           var colVal = "";
 
           if (indexUser(id, it.users) >= 0) {
-            colVal = "green"
-          } else if (isShiftFull(it._id)){
-            colVal = "red"
-          } else {
-            colVal = "blue"
+            //you're in it
+            if (isSwappedOut(userid, it.swaps)) {
+              colVal = "purple";
+            }
+            else if (isWaitingSwap(userid, currentGroup, it._id, findDate(it._id))) {
+              colVal = "pink";
+            }
+            else //you're in it with no swaps
+              colVal = "green";
+          } 
+          else {
+            //you're not in it
+            if (isSwappedIn(userid, it.swaps)) {
+              colVal = "yellow"
+            }
+            else if (isShiftFull(it._id)){
+              colVal = "red";
+            }
+            else
+              colVal = "blue"; 
           }
+
 
           if (it.date) {
             return {
@@ -107,23 +123,54 @@
       right: ''
     }
   },
+  getCurrentGroupId: function() {
+    return Users.findOne({_id: currentUserId()}).current;
+  },
+  getGroupHeader: function () {
+     if (Users.findOne({_id: currentUserId()}).current == null)
+      return "No Groups";
+    else 
+    {
+      if (Groups.findOne({_id: getCurrentGroupId()}).groupname == null) {
+        let groupid = Users.findOne({_id: currentUserId()}).groups[0];
+        if (groupid != null) {
+          setCurrentGroup(groupid);
+        }
+        else
+          return "No Current Groups"
+      }
+    }
+      return Groups.findOne({_id: getCurrentGroupId()}).groupname; 
+
+  },
   onEventClicked: function() {
+    var fc = $('.fc');
     var user = Users.findOne({username: currentUser()});
     var userid = user._id;
     let currentGroup = user.current;
     var group = Groups.findOne({_id: currentGroup});
     var employers = group.employers;
     return function(calEvent, jsEvent, view) {
-        var fc = $('.fc');
         var buttonid = calEvent._id;
         lastshiftid = buttonid;
         if (swapstatus) {
-          var firstperson = Shifts.find({_id: buttonid}).users[0];
-          addUserToShift(currentUserId(), buttonid);
-          removeUserFromShift(currentUserId(), swapid);
-          removeUserFromShift(firstperson, buttonid);
-          addUserToShift(firstperson, swapid);
-        }
+          //notifyswap(subout, groupid, shiftid, dateOut, swapid, dateIn)
+            //check if there is already an array of notification
+          // add field swap into the shift {subin:_id, subout:_id, date:x}
+          if (lastshiftid == swapid) {
+            swapstatus = false;
+            alert("You cannot swap with the same shift");
+          }
+          else {
+            var swapMoment = findDate(swapid);
+            var lastMoment = findDate(lastshiftid)
+            
+            notifySwap(currentGroup, userid, swapid, swapMoment, lastshiftid, lastMoment);
+            swapstatus = false;
+            alert("You will be notified if anyone accepts your request");
+          }
+        } 
+        else {
         if (indexUser(userid, employers) == -1) {
           $(this).popover({
               html: true,
@@ -131,6 +178,7 @@
               title: function() {
                   return $("#popover-head").html();
               },
+              container: 'body',
               content: function() {
                   let user = currentUserId();
           
@@ -156,6 +204,7 @@
               title: function() {
                   return $("#popover-head").html();
               },
+              container: 'body',
               content: function() {
                   let user = currentUserId();
           
@@ -175,17 +224,13 @@
           });
         }
         if (prevEvent == calEvent) {
-          console.log("hello");
-          console.log(eventCounter);
           if (eventCounter == 0) {
             $(this).popover('show');
             eventCounter = 1;
           }
           else {
-            console.log("setting to 0");
             $(this).popover('destroy');
             eventCounter = 0;
-            console.log(eventCounter);
           }
         }
         else {  
@@ -194,16 +239,7 @@
           eventCounter = 1;
         }
         prevEvent = calEvent;
-
-       /* console.log(calEvent.counter);
-        if (calEvent.counter % 2 == 0) {
-          $(this).popover('show');
-          calEvent.counter += 1;
-        }
-        else {
-          $(this).popover('destroy');
-          calEvent.counter = 0;
-        }*/
+      }
     }
   }
 });

@@ -1,0 +1,42 @@
+<template name = "activeRequest">
+	<div class="well">
+		<center><h2> Active Requests </h2></center>
+		{{#if zeroRequest}}
+			{{> noRequest}}
+		{{else}}
+			{{#each getRequests}}
+				{{#if isSub type}}
+					{{> subRequest}}
+				{{else}}
+					{{> swapRequest}}
+				{{/if}}
+			{{/each}}
+		{{/if}}
+	</div>
+</template>
+
+<template name = "noRequest">
+You currently have no outstanding requests!
+</template>
+
+<template name = "subRequest">
+	<div id = "notificationlist">
+		<li>
+			Request: <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} 
+			<button type = "button" id = {{_id}} class = "btn btn-danger">
+				CANCEL REQUEST
+			</button>
+		</li>
+	</div>
+</template>
+
+<template name = "swapRequest">
+	<div id = "notificationlist">
+		<li>
+			Request: <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} with {{swapdate}} {{startout}} - {{endout}} 
+			<button type = "button" id = {{_id}} class = "btn btn-danger">
+				CANCEL REQUEST
+			</button>
+		</li>
+	</div>
+</template>
