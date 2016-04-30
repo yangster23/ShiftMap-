@@ -13,7 +13,7 @@ Template.updateGroup.events({
    
     // Insert an employer into the collection
     if (text != "" && Employers.find({employer: text}).count() == 0)
-      Employers.insert({employer: text});
+      addEmployerToGroup(idFromName(text), getCurrentGroupId());
 
     // Clear form
     target.text.value = '';
@@ -28,7 +28,7 @@ Template.updateGroup.events({
    
     // Insert an employee into the collection
     if (text != "" && Employees.find({employee: text}).count() == 0)
-      Employees.insert({employee: text});
+      addUserToGroup(idFromName(text), getCurrentGroupId());
     // Clear form
     target.text.value = '';
   },
@@ -53,6 +53,8 @@ Template.updateGroup.events({
     event.target.start.value = '';
     event.target.end.value = '';
     event.target.capacity.value = '';
+
+
   },
   // Pressing the update button
   'click .btn-primary'(event) {
@@ -79,7 +81,7 @@ Template.updateGroup.events({
     if (Employers.find({}).count() != 0 || 
         Employees.find({}).count() != 0 || 
         FormShifts.find({}).count() != 0) {
-      $('#myModal').modal('hide');
+        $('#myModal').modal('hide');
     }
     
     Employers.remove({});
@@ -98,10 +100,27 @@ Template.updateGroup.rendered=function() {
 
 Template.updateGroup.helpers({
   employers() {
-    return Employers.find({});
+    let groupid = getCurrentGroupId(); 
+    let group = Groups.findOne({_id: groupid});
+    let employers = group.employers;
+    for (let i = 0; i < employers.length; i++) {
+      name = nameFromId(employers[i].userid);
+      employers[i].employer = name; 
+    }
+    return employers;
   },
   employees() {
-    return Employees.find({});
+    let groupid = getCurrentGroupId(); 
+    let group = Groups.findOne({_id: groupid});
+    let employees = group.users;
+    let employers = group.employers; 
+    for (let i = employees.length - 1; i >= 0; i--) {
+      name = nameFromId(employees[i].userid);
+      employees[i].employee = name; 
+      if (indexUser(employees[i].userid, employers) >= 0)
+        employees.splice(i, 1); 
+    }
+    return employees;  
   },
   formShifts() {
     return FormShifts.find({});
@@ -110,13 +129,14 @@ Template.updateGroup.helpers({
 
 Template.employer.events({
   'click .delete'() {
-    Employers.remove(this._id);
+    if (this.userid != currentUserId())
+      removeEmployerFromGroup(this.userid, getCurrentGroupId());
   },
 });
 
 Template.employee.events({
   'click .delete'() {
-    Employees.remove(this._id);
+    removeUserFromGroup(this.userid, getCurrentGroupId());
   },
 });
 
@@ -125,7 +145,3 @@ Template.shift.events({
     FormShifts.remove(this._id);
   },
 });
-
-
-
-

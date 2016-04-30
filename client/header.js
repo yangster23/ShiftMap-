@@ -22,10 +22,21 @@ Template.Header.helpers({
     return getCurrentNotifications().length;
   },
   getGroupHeader: function () {
-    if (Users.findOne({_id: currentUserId()}).current == null)
-      return "No Current Groups";
+     if (Users.findOne({_id: currentUserId()}).current == null)
+      return "No Groups";
     else 
-      return Groups.findOne({_id: getCurrentGroupId()}).groupname;
+    {
+      if (Groups.findOne({_id: getCurrentGroupId()}).groupname == null) {
+        let groupid = Users.findOne({_id: currentUserId()}).groups[0];
+        if (groupid != null) {
+          setCurrentGroup(groupid);
+        }
+        else
+          return "No Current Groups"
+      }
+    }
+      return Groups.findOne({_id: getCurrentGroupId()}).groupname; 
+
   }
 });
   

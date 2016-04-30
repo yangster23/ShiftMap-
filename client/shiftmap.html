@@ -4,20 +4,26 @@
 
 <template name="calendar">
     <div class="well">
+      <div id="some-div">
+      <h1 id= "calendar_title"><center><a href="#" data-toggle="popover" title="Description" data-content={{getGroupDescription}}>Calendar of {{getGroupHeader}}</a></center></h1>
+  </div>
+  {{#if isCurrentEmployer}}
       {{>updateGroup}}
+      {{>deleteGroup}}
+  {{/if}}
       {{> fullcalendar
-          class="mainCalendar"
-          defaultView='agendaWeek'
-          height="auto"
-          events=events
-          header=setCalHeader
-          eventClick=onEventClicked
-          eventRender=onEventRender
-          allDaySlot=false
-          minTime="08:00"
-          maxTime="24:00"
-          displayEventTime=true
-          timeFormat="H:mm"
+      class="mainCalendar"
+      defaultView='agendaWeek'
+      height="auto"
+      events=events
+      header=setCalHeader
+      eventClick=onEventClicked
+      eventRender=onEventRender
+      allDaySlot=false
+      minTime="08:00"
+      maxTime="24:00"
+      displayEventTime=true
+      timeFormat="H:mm"
       }}
 
       <div id = "popover-head" class="hide">
@@ -84,7 +90,7 @@
 
 <template name= "emptyGroup">
   <div class="well">
-    <h3 id="emptyGroupHeader"><center>Whoops, no current groups! Looks like you need to add a new group...</center></h3>
+    <h3 id="emptyGroupHeader"><center>Whoops! Looks like you need to add a new group...</center></h3>
   </div>
 </template>
 
@@ -92,11 +98,12 @@
   {{#if currentUser}}
   <div id='cssmenu'>
     <ul>
-     <li><a href='/'><span>Home</span></a></li>
+     <li><a href='/'><span>ShiftMap</span></a></li>
      <li><a href='/help'><span>Help</span></a></li>
      <li><a href='/about-us'><span>About Us</span></a></li>
+    <li><a href='/notifications'><span>Notifications {{getNotificationCount}}</span></a></li>
     <li class="groupList">
-    <button id="currGroup" type="button" class="group"><a href='#'>{{getGroupHeader}}</a></button> 
+    <button id="currGroup" type="button" class="group"><a href='/'>{{getGroupHeader}}</a></button> 
     <div id="myDropdownGroup" class="dropdown-content">
       {{#if currentUser}}
         {{#each getGroups currentUser.profile.name}}
@@ -106,7 +113,6 @@
       {{/if}}
     </div>
     </li>
-    <li><a href='/notifications'><span>Notifications {{getNotificationCount currentUser.profile.name}}</span></a></li>
      {{> CasLogin }}
    </ul>
  </div>
@@ -131,6 +137,3 @@
   </li>
   {{/if}}
 </template>
-
-
-
