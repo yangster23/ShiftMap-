@@ -253,6 +253,7 @@
         }
         else {  
           $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").not(this).popover('destroy');
+          $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").not(this).popover('destroy');
           $(this).popover('show');
           eventCounter = 1;
         }
@@ -273,6 +274,7 @@
         fc.fullCalendar('refetchEvents');
     });
     $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('destroy');
+    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").not(this).popover('destroy');
 
   };
 

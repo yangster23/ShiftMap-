@@ -157,17 +157,18 @@ Template.subNotification.events({
 	 		let shiftId = notif.shiftid;
 	 		let date = notif.date;
 
+	 		let swapId = notif.swapid;
+	 		let swapdate = notif.swapdate;
+
 	 		// check what kind of request it is
 	 		if (type == "sub") {
-	 			addSwap(date, swapInId, swapOutId, shiftId);
+	 			addSwap(date, swapInId, swapOutId, shiftId, swapId);
 	 			//Notifications.remove({"_id" : notifID});
 	 			Notifications.update({"_id": notifID}, {$set: {"acceptID": swapInId}});
 	 		}
 	 		else {
-	 			let swapId = notif.swapid;
-	 			let swapdate = notif.swapdate;
-	 			addSwap(date, swapInId, swapOutId, shiftId);
-	 			addSwap(swapdate, swapOutId, swapInId, swapId);
+	 			addSwap(date, swapInId, swapOutId, shiftId, swapId);
+	 			addSwap(swapdate, swapOutId, swapInId, swapId, shiftId);
 	 			let noteID = notif.noteid;
 	 			Notifications.find({"noteid" : noteID}).forEach(function (notif) {
 	 				//Notifications.remove({"_id" : notif._id});
@@ -203,17 +204,18 @@ Template.swapNotification.events({
 	 		let shiftId = notif.shiftid;
 	 		let date = notif.date;
 
+	 		let swapId = notif.swapid;
+	 		let swapdate = notif.swapdate;
+
 	 		// check what kind of request it is
 	 		if (type == "sub") {
-	 			addSwap(date, swapInId, swapOutId, shiftId);
+	 			addSwap(date, swapInId, swapOutId, shiftId, swapId);
 	 			//Notifications.remove({"_id" : notifID});
 	 			Notifications.update({"_id": notifID}, {$set: {"acceptID": swapInId}});
 	 		}
 	 		else {
-	 			let swapId = notif.swapid;
-	 			let swapdate = notif.swapdate;
-	 			addSwap(date, swapInId, swapOutId, shiftId);
-	 			addSwap(swapdate, swapOutId, swapInId, swapId);
+	 			addSwap(date, swapInId, swapOutId, shiftId, swapId);
+	 			addSwap(swapdate, swapOutId, swapInId, swapId, shiftId);
 	 			let noteID = notif.noteid;
 	 			Notifications.find({"noteid" : noteID}).forEach(function (notif) {
 	 				//Notifications.remove({"_id" : notif._id});
