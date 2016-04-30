@@ -11,7 +11,5 @@ Template.deleteGroup.events({
     }
     Groups.remove({_id: groupid});
     setCurrentGroup(Users.findOne({_id: currentUserId()}).groups[0].groupid); 
-    Router.go('/');
-    location.reload();
-  }
+    }
 }); 

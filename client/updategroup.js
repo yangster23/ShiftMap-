@@ -47,7 +47,7 @@ Template.updateGroup.events({
     var re = "^(0|1)?[0-9]:[0-5][0-9](am|pm)$";
 
     if (start.match(re) != null && end.match(re) != null && parseInt(capacity) > 0) {
-      FormShifts.insert({"start": start, "end": end, "capacity": capacity, "date": date, "repeat": repeat});
+      addShift({"start": formatTime(start), "end": formatTime(end), "capacity": capacity, "date": date, "repeat": repeat}, getCurrentGroupId());
     }
 
     event.target.start.value = '';
@@ -55,40 +55,6 @@ Template.updateGroup.events({
     event.target.capacity.value = '';
 
 
-  },
-  // Pressing the update button
-  'click .btn-primary'(event) {
-          
-    let employers = Employers.find().fetch();
-    let shifts = FormShifts.find().fetch();
-    let employees = Employees.find().fetch();
-    
-    let groupid = getCurrentGroupId();
-    addEmployerToGroup(currentUserId(), groupid);
-    for (let i = 0; i < employers.length; i++) {
-      addEmployerToGroup(idFromName(employers[i].employer), groupid);
-    }
-    
-    for (let i = 0; i < employees.length; i++) {
-      addUserToGroup(idFromName(employees[i].employee), groupid);
-    }
-
-    for (let i = 0; i < shifts.length; i++) {
-      shifts[i].start = formatTime(shifts[i].start);
-      shifts[i].end = formatTime(shifts[i].end);
-      addShift(shifts[i],groupid);
-    }
-    if (Employers.find({}).count() != 0 || 
-        Employees.find({}).count() != 0 || 
-        FormShifts.find({}).count() != 0) {
-        $('#myModal').modal('hide');
-    }
-    
-    Employers.remove({});
-    Employees.remove({});
-    FormShifts.remove({});
-
-    Router.go('/');
   }
 });
 
@@ -123,7 +89,7 @@ Template.updateGroup.helpers({
     return employees;  
   },
   formShifts() {
-    return FormShifts.find({});
+    return Shifts.find({groupid: getCurrentGroupId()});
   }
 }); 
 
@@ -142,6 +108,22 @@ Template.employee.events({
 
 Template.shift.events({
   'click .delete'() {
-    FormShifts.remove(this._id);
+    removeShift(this._id);
   },
+});
+
+var weekdays = {0: "Sunday", 1: "Monday", 2: "Tuesday", 3: "Wednesday", 4: "Thursday", 5: "Friday", 6: "Saturday"};
+Template.shift.helpers({
+  displayShift: function () {
+    let display = "Start: " + unformatTime(this.start);
+    display = display + ". End: " + unformatTime(this.end);
+    if (this.date) {
+      display = display + ". Date: " + this.date;
+    } else {
+
+      display = display + ". Day of week: " + weekdays[this.weekday];
+    }
+    display = display + ". Capacity: " + this.capacity;
+    return display;
+  }
 });
