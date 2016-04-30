@@ -12,6 +12,10 @@ Template.deleteGroup.events({
     }
     Groups.remove({_id: groupid});
 
-    setCurrentGroup(Users.findOne({_id: currentUserId()}).groups[0].groupid);
+    for (let i = 0; i < users.length; i++) {
+      if (Users.findOne({_id: users[i].userid}).groups[0] == undefined)
+        Users.update({_id: users[i].userid}, {$set: {current: null}});
+      else setCurrentGroup(Users.findOne({_id: users[i].userid}).groups[0].groupid);
+    }
   }
 });

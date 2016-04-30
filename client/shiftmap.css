@@ -67,8 +67,8 @@ div.item {
     text-align: center;
 }
 img {
-    width: 204px;
-    height: 204px;
+    width: 220px;
+    height: 240px;
 }
 .caption {
     font-family: 'Lato', sans-serif;
@@ -393,5 +393,10 @@ li.listForm {
   top: 0px;
   padding: 10px;
   margin-right: 10px;
+}
+
+/* Add transparency to events for swapped in or swapped out*/
+.transparent-event {
+  opacity:0.6;
 }
 

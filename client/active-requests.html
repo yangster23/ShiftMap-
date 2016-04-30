@@ -7,7 +7,8 @@
 			{{#each getRequests}}
 				{{#if isSub type}}
 					{{> subRequest}}
-				{{else}}
+				{{/if}}
+				{{#if isSwap type}}
 					{{> swapRequest}}
 				{{/if}}
 			{{/each}}

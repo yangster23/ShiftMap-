@@ -14,6 +14,18 @@ Template.notifications.helpers({
 	isSub : function(type) {
 		return (type == "sub");
 	},
+	isSwap : function(type) {
+		return (type == "swap");
+	},
+	isAdd : function(type) {
+		return (type == "add");
+	},
+	isDrop : function(type) {
+		return (type == "drop");
+	},
+	isEmployer : function() {
+		return isCurrentEmployer();
+	},
 	existAcceptID : function(acceptID) {
 		console.log(acceptID);
 		if (acceptID == undefined) return false;
@@ -22,30 +34,114 @@ Template.notifications.helpers({
 });
 
 Template.subRequestResponse.helpers({
-	userId : function(acceptID) {
+	idOfAccepter : function(acceptID) {
 		var user = Users.findOne({_id: acceptID});
 		return user.username;
+	},
+	idOfSender : function(sender) {
+		var user = Users.findOne({_id: sender});
+		return user.username;
+	},
+	getGroupName : function(groupid) {
+		return Groups.findOne({_id: groupid}).groupname;
 	}
 });
 
 Template.swapRequestResponse.helpers({
-	userId : function(acceptID) {
+	idOfAccepter : function(acceptID) {
 		var user = Users.findOne({_id: acceptID});
 		return user.username;
+	},
+	idOfSender : function(sender) {
+		var user = Users.findOne({_id: sender});
+		return user.username;
+	},
+	getGroupName : function(groupid) {
+		return Groups.findOne({_id: groupid}).groupname;
 	}
 });
 
 Template.subRequestResponse.events({
 	'click .btn-danger' : function (event) {
 		let notifID = event.currentTarget.id;
-		Notifications.remove({"_id" : notifID});
+		let seenArray = Notifications.findOne({"_id" : notifID}).ok;
+	 	seenArray = seenArray.concat(currentUserId());
+	 	Notifications.update({"_id": notifID}, {$set: {"ok": seenArray}});
 	}
 });
 
 Template.swapRequestResponse.events({
 	'click .btn-danger' : function(event) {
 		let notifID = event.currentTarget.id;
-		Notifications.remove({"_id" : notifID});
+		let seenArray = Notifications.findOne({"_id" : notifID}).ok;
+	 	seenArray = seenArray.concat(currentUserId());
+	 	Notifications.update({"_id": notifID}, {$set: {"ok": seenArray}});
+	}
+});
+
+Template.addNotification.helpers({
+	idOfSender : function(sender) {
+		var user = Users.findOne({_id: sender});
+		return user.username;
+	},
+	isRepeating : function(shiftid) {
+		var shift = Shifts.findOne({_id: shiftid});
+		if (shift.weekday) return "repeating";
+		return "";
+	},
+	formatDate : function(shiftid) {
+		return findDate(shiftid);
+	},
+	getGroupName : function(groupid) {
+		return Groups.findOne({_id: groupid}).groupname;
+	}
+});
+
+Template.dropNotification.helpers({
+	idOfSender : function(sender) {
+		var user = Users.findOne({_id: sender});
+		return user.username;
+	},
+	isRepeating : function(shiftid) {
+		var shift = Shifts.findOne({_id: shiftid});
+		if (shift.weekday) return "repeating";
+		return "";
+	},
+	formatDate : function(shiftid) {
+		return findDate(shiftid);
+	},
+	getGroupName : function(groupid) {
+		return Groups.findOne({_id: groupid}).groupname;
+	}
+});
+
+Template.addNotification.events({
+	'click .btn-danger' : function (event) {
+		let notifID = event.currentTarget.id;
+		let seenArray = Notifications.findOne({"_id" : notifID}).ok;
+	 	seenArray = seenArray.concat(currentUserId());
+	 	Notifications.update({"_id": notifID}, {$set: {"ok": seenArray}});
+	}
+});
+
+Template.dropNotification.events({
+	'click .btn-danger' : function(event) {
+		let notifID = event.currentTarget.id;
+		let seenArray = Notifications.findOne({"_id" : notifID}).ok;
+	 	seenArray = seenArray.concat(currentUserId());
+	 	Notifications.update({"_id": notifID}, {$set: {"ok": seenArray}});
+	}
+});
+
+Template.subNotification.helpers({
+	getGroupName : function(groupid) {
+		return Groups.findOne({_id: groupid}).groupname;
+	}
+});
+
+Template.swapNotification.helpers({
+	getGroupName : function(groupid) {
+		return Groups.findOne({_id: groupid}).groupname;
 	}
 });
 
@@ -72,11 +168,15 @@ Template.subNotification.events({
 	 			let swapdate = notif.swapdate;
 	 			addSwap(date, swapInId, swapOutId, shiftId);
 	 			addSwap(swapdate, swapOutId, swapInId, swapId);
-	 			//let noteID = notif.noteid;
-	 			//Notifications.find({"noteid" : noteid}).forEach(function (notif) {
+	 			let noteID = notif.noteid;
+	 			Notifications.find({"noteid" : noteID}).forEach(function (notif) {
 	 				//Notifications.remove({"_id" : notif._id});
-	 				Notifications.update({"_id": notifID}, {$set: {"acceptID": swapInId}});
-	 			//});
+	 				console.log(notif);
+	 				if (notif._id == notifID)
+	 					Notifications.update({"_id": notif._id}, {$set: {"acceptID": swapInId}});
+	 				else
+	 					Notifications.remove({"_id" : notif._id});
+	 			});
 	 		}
 	 		let seenArray = Notifications.findOne({"_id" : notifID}).seen;
 	 		seenArray = seenArray.concat(currentUserId());
@@ -114,11 +214,15 @@ Template.swapNotification.events({
 	 			let swapdate = notif.swapdate;
 	 			addSwap(date, swapInId, swapOutId, shiftId);
 	 			addSwap(swapdate, swapOutId, swapInId, swapId);
-	 			//let noteID = notif.noteid;
-	 			//Notifications.find({"noteid" : noteID}).forEach(function (notif) {
+	 			let noteID = notif.noteid;
+	 			Notifications.find({"noteid" : noteID}).forEach(function (notif) {
 	 				//Notifications.remove({"_id" : notif._id});
-	 				Notifications.update({"_id": notifID}, {$set: {"acceptID": swapInId}});
-	 			//});
+	 				console.log(notif);
+	 				if (notif._id == notifID)
+	 					Notifications.update({"_id": notif._id}, {$set: {"acceptID": swapInId}});
+	 				else
+	 					Notifications.remove({"_id" : notif._id});
+	 			});
 	 		}
 	 		let seenArray = Notifications.findOne({"_id" : notifID}).seen;
 	 		seenArray = seenArray.concat(currentUserId());

@@ -54,11 +54,13 @@
           var endtime = String(it.end)
           var id = currentUserId();
           var colVal = "";
+          var classVal = "";
 
           if (indexUser(id, it.users) >= 0) {
             //you're in it
-            if (isSwappedOut(userid, it.swaps)) {
-              colVal = "purple";
+            if (isSwappedOut(userid, it.swaps, findDate(it._id))) {
+              colVal = "green";
+              classVal = "transparent-event";
             }
             else if (isWaitingSwap(userid, currentGroup, it._id, findDate(it._id))) {
               colVal = "pink";
@@ -68,8 +70,9 @@
           } 
           else {
             //you're not in it
-            if (isSwappedIn(userid, it.swaps)) {
-              colVal = "yellow"
+            if (isSwappedIn(userid, it.swaps, findDate(it._id))) {
+              colVal = "blue";
+              classVal = "transparent-event";
             }
             else if (isShiftFull(it._id)){
               colVal = "red";
@@ -78,13 +81,13 @@
               colVal = "blue"; 
           }
 
-
           if (it.date) {
             return {
               start: formatDate(it.date) + "T" + starttime,
               end: formatDate(it.date) + "T" + endtime,
               _id: it._id,
-              color: colVal
+              color: colVal,
+              className: classVal
             };
           }
           else {
@@ -93,7 +96,8 @@
               end: "2016-04-26T" + endtime,
               _id: it._id,
               color: colVal,
-              dow: [parseInt(it.weekday)]
+              dow: [parseInt(it.weekday)],
+              className: classVal
             };
           }
 
@@ -112,7 +116,7 @@
       callback(events);
       callback(secondEvent);
       fc.fullCalendar('refetchEvents');
-      console.log("calling rerender")
+      console.log("calling rerender");
       fc.fullCalendar('rerenderEvents');
     };
   },
@@ -153,6 +157,7 @@
     return function(calEvent, jsEvent, view) {
         var buttonid = calEvent._id;
         lastshiftid = buttonid;
+        var shift = Shifts.findOne({_id: lastshiftid});
         if (swapstatus) {
           //notifyswap(subout, groupid, shiftid, dateOut, swapid, dateIn)
             //check if there is already an array of notification
@@ -179,19 +184,25 @@
                   return $("#popover-head").html();
               },
               container: 'body',
-              content: function() {
-                  let user = currentUserId();
-          
-                  if (isUserInShift(user, lastshiftid)) {
-                    return $("#popover-content2").html();
+              content: function() {          
+                  if (isUserInShift(userid, lastshiftid)) {
+                    if (isSwappedOut(userid, shift.swaps, findDate(lastshiftid))) {
+                      if (greaterOneDay("out", userid, shift.swaps))
+                        return $("#popover-content4").html();
+                      else return $("#popover-content1").html();
+                    }
+                    else return $("#popover-content2").html();
                   }
                   else {
-                    if (isShiftFull(lastshiftid)) {
+                    if (isSwappedIn(userid, shift.swaps, findDate(lastshiftid))) {
+                      if (greaterOneDay("in", userid, shift.swaps))
+                        return $("#popover-content4").html();
+                      else return $("#popover-content1").html();
+                    }
+                    else if (isShiftFull(lastshiftid)) {
                       return $("#popover-content1").html();
                     }
-                    else {
-                      return $("#popover-content3").html();
-                   }
+                    else return $("#popover-content3").html();
                   }
                 return $("#popover-content1").html();
               }
@@ -206,18 +217,25 @@
               },
               container: 'body',
               content: function() {
-                  let user = currentUserId();
-          
-                  if (isUserInShift(user, lastshiftid)) {
-                    return $("#employer-popover-content2").html();
+                  if (isUserInShift(userid, lastshiftid)) {
+                    if (isSwappedOut(userid, shift.swaps, findDate(lastshiftid))) {
+                      if (greaterOneDay("out", userid, shift.swaps))
+                        return $("#employer-popover-content4").html();
+                      else return $("#employer-popover-content1").html();
+                    }
+                    else return $("#employer-popover-content2").html();
                   }
                   else {
-                    if (isShiftFull(lastshiftid)) {
+                    if (isSwappedIn(userid, shift.swaps, findDate(lastshiftid))) {
+                      if (greaterOneDay("in", userid, shift.swaps))
+                        return $("#employer-popover-content4").html();
+                      else return $("#employer-popover-content1").html(); 
+                    }
+                    else if (isShiftFull(lastshiftid)) {
                       return $("#employer-popover-content1").html();
                     }
-                    else {
+                    else
                       return $("#employer-popover-content3").html();
-                   }
                   }
                 return $("#employer-popover-content1").html();
               }

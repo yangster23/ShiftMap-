@@ -3,23 +3,54 @@
 	<div class="well">
 		<center><h2> Notifications </h2></center>
 		{{#if zeroNotification}}
-			{{> noNotification}}
+				{{> noNotification}}
+		<!-- There is at least one notification to display -->
 		{{else}}
-			{{#each getNotifications}}
-				{{#if existAcceptID acceptID}}
-					{{#if isSub type}}
-						{{> subRequestResponse}}
+			<!--This is for employer-->
+			{{#if isEmployer}}
+				{{#each getNotifications}}
+					{{#if existAcceptID acceptID}}
+						{{#if isSub type}}
+							{{> subRequestResponse}}
+						{{/if}}
+						{{#if isSwap type}}
+							{{> swapRequestResponse}}
+						{{/if}}
 					{{else}}
-						{{> swapRequestResponse}}
+						{{#if isSub type}}
+							{{> subNotification}}
+						{{/if}}
+						{{#if isSwap type}}
+							{{> swapNotification}}
+						{{/if}}
+						{{#if isAdd type}}
+							{{> addNotification}}
+						{{/if}}
+						{{#if isDrop type}}
+							{{> dropNotification}}
+						{{/if}}
 					{{/if}}
-				{{else}}
-					{{#if isSub type}}
-						{{> subNotification}}
+				{{/each}}
+			<!-- This is for employee -->
+			{{else}}
+				{{#each getNotifications}}
+					{{#if existAcceptID acceptID}}
+						{{#if isSub type}}
+							{{> subRequestResponse}}
+						{{/if}}
+						{{#if isSwap type}}
+							{{> swapRequestResponse}}
+						{{/if}}
 					{{else}}
-						{{> swapNotification}}
+						{{#if isSub type}}
+							{{> subNotification}}
+						{{/if}}
+						{{#if isSwap type}}
+							{{> swapNotification}}
+						{{/if}}
 					{{/if}}
-				{{/if}}
-			{{/each}}
+				{{/each}}
+			{{/if}}
 		{{/if}}
 	</div>
 </template>
@@ -27,7 +58,7 @@
 <template name = "subRequestResponse">
 	<div id = "notificationlist">
 		<li>
-			Accepted Request: <b>{{userId acceptID}}</b> has accepted <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} 
+			{{getGroupName groupid}} Accepted Request: <b>{{idOfAccepter acceptID}}</b> has accepted <b>{{type}}</b> request from <b>{{idOfSender sender}}</b> for {{date}} {{startin}} - {{endin}} 
 			<button type = "button" id = {{_id}} class = "btn btn-danger">
 				OK
 			</button>
@@ -38,7 +69,31 @@
 <template name = "swapRequestResponse">
 	<div id = "notificationlist">
 		<li>
-			Accepted Request: <b>{{userId acceptID}}</b> has accepted <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} with {{swapdate}} {{startout}} - {{endout}}
+			{{getGroupName groupid}} Accepted Request: <b>{{idOfAccepter acceptID}}</b> has accepted <b>{{type}}</b> request from <b>{{idOfSender sender}}</b> for {{date}} {{startin}} - {{endin}} with {{swapdate}} {{startout}} - {{endout}}
+			<button type = "button" id = {{_id}} class = "btn btn-danger">
+				OK
+			</button>
+		</li>
+	</div>
+</template>
+
+<!-- buttons for add notification -->
+<template name = "addNotification">
+	<div id = "notificationlist">
+		<li>
+			{{getGroupName groupid}} Enrolled: <b>{{idOfSender sender}}</b> has <b>{{type}}ed</b> {{isRepeating shiftid}} shift at {{formatDate shiftid}} {{startin}} - {{endin}} 
+			<button type = "button" id = {{_id}} class = "btn btn-danger">
+				OK
+			</button>
+		</li>
+	</div>
+</template>
+
+<!-- buttons for drop notification -->
+<template name = "dropNotification">
+	<div id = "notificationlist">
+		<li>
+			{{getGroupName groupid}} Dropped: <b>{{idOfSender sender}}</b> has <b>{{type}}ped</b> {{isRepeating shiftid}} shift at {{formatDate shiftid}} {{startin}} - {{endin}} 
 			<button type = "button" id = {{_id}} class = "btn btn-danger">
 				OK
 			</button>
@@ -50,7 +105,7 @@
 <template name = "subNotification">
 	<div id = "notificationlist">
 		<li>
-			Request: <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} 
+			{{getGroupName groupid}} Request: <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} 
 			<button type = "button" id = {{_id}} class = "btn btn-success">
 				ACCEPT 
 			</button>
@@ -65,7 +120,7 @@
 <template name="swapNotification">
 	<div id = "notificationlist">
 		<li>
-			Request: <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} with {{swapdate}} {{startout}} - {{endout}} 
+			{{getGroupName groupid}} Request: <b>{{type}}</b> for {{date}} {{startin}} - {{endin}} with {{swapdate}} {{startout}} - {{endout}} 
 			<button type = "button" id = {{_id}} class = "btn btn-success">
 				ACCEPT 
 			</button>
