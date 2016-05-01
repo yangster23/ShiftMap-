@@ -96,7 +96,7 @@
       fc.fullCalendar('rerenderEvents');
     };
   },
-  setCalHeader() {
+  setCalHeader: function() {
     return {
       left: 'prev,next today',
       center: '',
@@ -105,23 +105,6 @@
   },
   getCurrentGroupId: function() {
     return Users.findOne({_id: currentUserId()}).current;
-  },
-  getGroupHeader: function () {
-     if (Users.findOne({_id: currentUserId()}).current == null)
-      return "No Groups";
-    else 
-    {
-      if (Groups.findOne({_id: getCurrentGroupId()}).groupname == null) {
-        let groupid = Users.findOne({_id: currentUserId()}).groups[0];
-        if (groupid != null) {
-          setCurrentGroup(groupid);
-        }
-        else
-          return "No Current Groups"
-      }
-    }
-      return Groups.findOne({_id: getCurrentGroupId()}).groupname; 
-
   },
   onEventClicked: function() {
     var fc = $('.fc');
@@ -227,9 +210,12 @@
             eventCounter = 0;
           }
         }
-        else {  
+        else {
+          console.log("is this getting here");  
           $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").not(this).popover('destroy');
+          $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('destroy');
           $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").not(this).popover('destroy');
+          $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('destroy');
           $(this).popover('show');
           eventCounter = 1;
         }
@@ -244,15 +230,17 @@
     var fc = this.$('.fc');
     //
     this.autorun(function () {
+        console.log("hello");
         //1) trigger event re-rendering when the collection is changed in any way
         //2) find all, because we've already subscribed to a specific range
-        Shifts.find();
         fc.fullCalendar('refetchEvents');
     });
-    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('destroy');
+    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").not(this).popover('destroy');
+    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('destroy');
     $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").not(this).popover('destroy');
-
+    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('destroy');
   };
+
 
 Template.calendar.rendered = function () {
   $(document).ready(function(){

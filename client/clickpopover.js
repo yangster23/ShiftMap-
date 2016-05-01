@@ -7,7 +7,10 @@ $(document).on("click", "#enrollButton", function (event) {
     var userid = user._id;
     let currentGroup = user.current;
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('hide');
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('hide');
+
 	fc.fullCalendar('refetchEvents');
 
  	addUserToShift(currentUserId(), lastshiftid);
@@ -19,7 +22,9 @@ $(document).on("click", "#dropButton", function () {
     var userid = user._id;
     let currentGroup = user.current;
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('hide');
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('hide');
 
 	removeUserFromShift(currentUserId(), lastshiftid);
 	notifyDrop(currentGroup, userid, lastshiftid);
@@ -27,7 +32,9 @@ $(document).on("click", "#dropButton", function () {
 $(document).on("click", "#swapButton", function () {
 	var fc = $('.fc');
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('hide');
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('hide');
 	fc.fullCalendar('refetchEvents');
 
 	swapid = lastshiftid;
@@ -40,7 +47,9 @@ $(document).on("click", "#subButton", function () {
     var userid = user._id;
     let currentGroup = user.current;
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('hide');
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('hide');
 	fc.fullCalendar('refetchEvents');
 
 	var moment = findDate(lastshiftid);
@@ -85,39 +94,47 @@ $(document).on("click", "#cancelButton", function () {
   		Notifications.remove({"_id": notifarray[i]._id})
 	}
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('hide');
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('hide');	
 	fc.fullCalendar('refetchEvents');
 });
 $(document).on("click", "#deleteShift", function () {
   	var fc = $('.fc');
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('hide');
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('hide');
 	fc.fullCalendar('refetchEvents');
 
 	Shifts.remove({'_id':lastshiftid});
 });
 
-$(document).on("click", function (event) {
+/*$(document).on("click", function (event) {
 	var fc = $('.fc');
-	console.log(event.toElement);
+	console.log(event);
   	if(String($(event.toElement).prop('outerHTML')).indexOf("class=\"popover-content\"") == -1 && String($(event.toElement).prop('outerHTML')).indexOf("class=\"fc-bg\"") == -1) {
   		$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
 		$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
 		fc.fullCalendar('refetchEvents');
 	}
-});
+});*/
 
 $(document).on("mouseover", function (event) {
 	var fc = $('.fc');
 	if (String($(event.toElement).prop('outerHTML')).indexOf("body") != -1) return;
   	if(String($(event.toElement).prop('outerHTML')).indexOf("class=\"fc-next-button") != -1 || String($(event.toElement).prop('outerHTML')).indexOf("class=\"fc-prev-button") != -1) {
   		$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
-		$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
+	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('hide');
 		fc.fullCalendar('refetchEvents');
 	}
 	if(String($(event.toElement).prop('outerHTML')).indexOf("class=\"fc-today-button") != -1 ) {
   		$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+		$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('hide');
 		$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
+		$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('hide');
 		fc.fullCalendar('refetchEvents');
 	}
 });

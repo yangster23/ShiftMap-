@@ -54,7 +54,7 @@ Template.updateGroup.events({
     }
   },
 
-  'click .btn btn-primary' (event) {
+  'click .btn btn-primary'(event) {
     Router.go('/');
 
   }
