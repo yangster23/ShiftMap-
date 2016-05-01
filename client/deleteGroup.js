@@ -1,6 +1,6 @@
 Template.deleteGroup.events({
   // Pressing the delete group button
-  'click .btn-ok'(event) {
+  'click .btn-danger'(event) {
     // get the group, find the group, get the rusers from that group and remove them front it and remove group. 
     let groupid = getCurrentGroupId();
     let users = Groups.findOne({_id: groupid}).users;
@@ -11,5 +11,11 @@ Template.deleteGroup.events({
       //setCurrentGroup(Users.findOne({_id: users[i].userid}).groups[0].groupid);
     }
     Groups.remove({_id: groupid});
+
+    for (let i = 0; i < users.length; i++) {
+      if (Users.findOne({_id: users[i].userid}).groups[0] == undefined)
+        Users.update({_id: users[i].userid}, {$set: {current: null}});
+      else setCurrentGroup(Users.findOne({_id: users[i].userid}).groups[0].groupid);
+    }
   }
 });

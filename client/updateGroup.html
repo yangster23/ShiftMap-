@@ -91,7 +91,8 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="modalSubmit">Update</button>
         </div>
       </div>
     </div>
@@ -115,7 +116,7 @@
 <template name="shift">
   <li class="listForm">
     <button class="delete">&times;</button>
-    <span class="text">{{displayShift}}</span>
+    <span class="text">Time: {{start}} - {{end}}; Capacity: {{capacity}}; Day of Week: {{weekday}}</span>
   </li>
 </template>
 

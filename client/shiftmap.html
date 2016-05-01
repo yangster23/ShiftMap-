@@ -5,12 +5,10 @@
 <template name="calendar">
     <div class="well">
       <div id="some-div">
-        <h1 id= "calendar_title"><center><a href="#" data-toggle="popover" title="Description" data-content={{getGroupDescription}}>Calendar of {{getGroupHeader}}</a></center></h1>
+        <h1 id="calendar_title"><center> Calendar of {{getGroupHeader}} </center></h1>
       </div>
-      {{#if isCurrentEmployer}}
-        {{>updateGroup}}
-        {{>deleteGroup}}
-      {{/if}}
+      {{>updateGroup}}
+      {{>deleteGroup}}
       {{> fullcalendar
           class="mainCalendar"
           defaultView='agendaWeek'
@@ -85,7 +83,7 @@
 </template>
 
 <template name="deleteGroup">
-  <button type="button" id="confirm" class="btn btn-danger btn-ok"> Delete Group </button>
+  <button type="button" id="confirm" class="btn btn-danger"> Delete Group </button>
 </template>
 
 <template name = "Home">
@@ -129,7 +127,7 @@
     </div>
     </li>
     <li class="groupList">
-    <a href='/notifications'> Notifications <span class="badge">{{getNotificationCount currentUser.profile.name}}</span></a>
+    <a href='/notifications'><span>Notifications {{getNotificationCount currentUser.profile.name}}</span></a>
     <div id="myDropdownGroup" class="dropdown-content">
       <a href='/activeRequest'><span> Active Requests </span></a>
     </div>

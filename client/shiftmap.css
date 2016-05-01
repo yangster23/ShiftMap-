@@ -16,46 +16,30 @@
   padding:0 5px;
 }
 
-.futura_header { 
-  font-family: 'Futura', sans-serif;
-}
-
 #calendar_title {
   font-family: 'Futura', sans-serif;
   margin-top: 0px
 }
-
-a:hover 
-{
-     color: black; 
-     text-decoration:none; 
-     cursor:pointer;  
+#some-element {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: #fff;
+  background-color: ;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: opacity 500ms;
+  -moz-transition: opacity 500ms;
+  -o-transition: opacity 500ms;
+  transition: opacity 500ms;
 }
 
-a:active{
-color: black;
+#some-div:hover #some-element { 
+  visibility: visible;
+  opacity: 1;
 }
-
- a:link {
-color: black; 
-text-decoration: none;
-}
-
-a:visited {
-color: black; 
-text-decoration: none;
-}
-
-a:hover {
-color: black; 
-text-decoration: none;
-}
-
-a:active {
-color: black; 
-text-decoration: none;
-}
-
 
 .btn-lg {
   margin-top:560px;
