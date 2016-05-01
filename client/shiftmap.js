@@ -124,8 +124,10 @@
           if (lastshiftid == swapid) {
             swapstatus = false;
             alert("You cannot swap with the same shift");
-          }
-          else {
+          } else if (indexUser(userid,Shifts.findOne({_id: lastshiftid}).users) >= 0) {
+            swapstatus = false;
+            alert("You cannot swap with your own shift");
+          } else {
             var swapMoment = findDate(swapid);
             var lastMoment = findDate(lastshiftid)
             
@@ -229,9 +231,6 @@
     // find id of full calendar
     var fc = this.$('.fc');
     //
-    $(document).ready(function(){
-      $('[data-toggle="popover"]').popover();   
-    });
     this.autorun(function () {
         console.log("hello");
         //1) trigger event re-rendering when the collection is changed in any way
@@ -243,4 +242,11 @@
     $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").not(this).popover('destroy');
     $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('destroy');
   };
+
+
+Template.calendar.rendered = function () {
+  $(document).ready(function(){
+      $('[data-toggle="popover"]').popover();   
+  });
+};
  
