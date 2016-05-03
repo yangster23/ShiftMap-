@@ -26,10 +26,62 @@ Template.notifications.helpers({
 	isEmployer : function() {
 		return isCurrentEmployer();
 	},
+	isCancelSub : function(type) {
+		return (type == "subcancel");
+	},
+	isCancelSwap : function(type) {
+		return (type == "swapcancel");
+	},
 	existAcceptID : function(acceptID) {
 		console.log(acceptID);
 		if (acceptID == undefined) return false;
 		return true;
+	}
+});
+
+Template.cancelSubResponse.helpers({
+	idOfAccepter : function(acceptID) {
+		var user = Users.findOne({_id: acceptID});
+		return user.username;
+	},
+	idOfSender : function(sender) {
+		var user = Users.findOne({_id: sender});
+		return user.username;
+	},
+	getGroupName : function(groupid) {
+		return Groups.findOne({_id: groupid}).groupname;
+	}
+});
+
+Template.cancelSwapResponse.helpers({
+	idOfAccepter : function(acceptID) {
+		var user = Users.findOne({_id: acceptID});
+		return user.username;
+	},
+	idOfSender : function(sender) {
+		var user = Users.findOne({_id: sender});
+		return user.username;
+	},
+	getGroupName : function(groupid) {
+		return Groups.findOne({_id: groupid}).groupname;
+	}
+});
+
+Template.cancelSubResponse.events({
+	'click .btn-danger' : function (event) {
+		let notifID = event.currentTarget.id;
+		let seenArray = Notifications.findOne({"_id" : notifID}).ok;
+	 	seenArray = seenArray.concat(currentUserId());
+	 	Notifications.update({"_id": notifID}, {$set: {"ok": seenArray}});
+	}
+});
+
+Template.cancelSwapResponse.events({
+	'click .btn-danger' : function (event) {
+		let notifID = event.currentTarget.id;
+		let seenArray = Notifications.findOne({"_id" : notifID}).ok;
+	 	seenArray = seenArray.concat(currentUserId());
+	 	Notifications.update({"_id": notifID}, {$set: {"ok": seenArray}});
 	}
 });
 

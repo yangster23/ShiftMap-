@@ -74,25 +74,33 @@ $(document).on("click", "#cancelButton", function () {
 			if (userid == swaps[i].swapin) var otherUserId = swaps[i].swapout;
 			else otherUserId = swaps[i].swapin;
 			notifarray = Notifications.find({"groupid": currentGroup, "date": swaps[i].date, "shiftid": lastshiftid, "sender": userid, "acceptID": otherUserId}).fetch();
+			notifarray = notifarray.concat(Notifications.find({"groupid": currentGroup, "date": swaps[i].date, "shiftid": lastshiftid, "sender": otherUserId, "acceptID": userid}).fetch());
 			swaps.splice(i, 1);
 			Shifts.update({_id: lastshiftid}, {$set: {"swaps": swaps}})
 		}
 	}
 
-	var otherShift = Shifts.findOne({'_id':otherShiftId});
-	var otherSwaps = otherShift.swaps;
+	var type = "subcancel";
+	if (otherShiftId != undefined) {
+		type = "swapcancel"
+		var otherShift = Shifts.findOne({'_id':otherShiftId});
+		var otherSwaps = otherShift.swaps;
 
-	for (let i = 0; i < otherSwaps.length; i++) {
-		if (otherSwaps[i].date == findDate(otherShiftId) && (userid == otherSwaps[i].swapin || userid == otherSwaps[i].swapout)) {
-			notifarray = notifarray.concat(Notifications.find({"groupid": currentGroup, "date": otherSwaps[i].date, "shiftid": otherShiftId, "sender": otherUserId, "acceptID": userid}).fetch());
-			otherSwaps.splice(i, 1);
-			Shifts.update({_id: otherShiftId}, {$set: {"swaps": otherSwaps}})
+		for (let i = 0; i < otherSwaps.length; i++) {
+			if (otherSwaps[i].date == findDate(otherShiftId) && (userid == otherSwaps[i].swapin || userid == otherSwaps[i].swapout)) {
+				notifarray = notifarray.concat(Notifications.find({"groupid": currentGroup, "date": otherSwaps[i].date, "shiftid": otherShiftId, "sender": otherUserId, "acceptID": userid}).fetch());
+				notifarray = notifarray.concat(Notifications.find({"groupid": currentGroup, "date": otherSwaps[i].date, "shiftid": otherShiftId, "sender": userid, "acceptID": otherUserId}).fetch());
+				otherSwaps.splice(i, 1);
+				Shifts.update({_id: otherShiftId}, {$set: {"swaps": otherSwaps}})
+			}
 		}
 	}
 
   	for (let i=0; i < notifarray.length; i++) {
-  		Notifications.remove({"_id": notifarray[i]._id})
+  		if (notifarray[i].type == "subcancel" || notifarray[i].type == "swapcancel") continue;
+  		Notifications.update({"_id": notifarray[i]._id}, {$set: {'type': type, 'seen': [], 'ok': []}});
 	}
+
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('hide');
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
@@ -107,7 +115,7 @@ $(document).on("click", "#deleteShift", function () {
 	$("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('hide');
 	fc.fullCalendar('refetchEvents');
 
-	Shifts.remove({'_id':lastshiftid});
+	removeShift(lastshiftid);
 });
 
 /*$(document).on("click", function (event) {

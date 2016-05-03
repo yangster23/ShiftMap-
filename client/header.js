@@ -45,6 +45,14 @@ Template.Header.events({
     let id = event.currentTarget.id;
     let userid = currentUserId();
     Users.update({_id: userid}, {$set: {current: id}});
+  },
+  'click .currGroup' : function(event) {
+    var fc = $('.fc');
+    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('hide');
+    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end fc-short']").not(this).popover('hide');
+    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").popover('hide');
+    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event fc-short']").not(this).popover('hide');
+    fc.fullCalendar('refetchEvents');
   }
 });
 
