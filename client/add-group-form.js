@@ -1,4 +1,6 @@
 Template.addForm.events({
+  // On pressing the button, creates a group with the given name and description
+  // Creator is by default an employer[24~
   'click .btn-primary' (event) {
     event.preventDefault();
 

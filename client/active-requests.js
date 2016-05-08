@@ -1,9 +1,11 @@
 Template.activeRequest.helpers({
-	getRequests : function() {
+	// Gets all unaccepted requests sent by the user
+  getRequests : function() {
 		let notifArray = getCurrentNotifications();
 		notifArray = filterRequests(notifArray);
 		return notifArray;
 	},
+  // Checks whether there are no active requests to display
 	zeroRequest : function() {
 		let notifArray = getCurrentNotifications();
 		notifArray = filterRequests(notifArray);
@@ -19,9 +21,11 @@ Template.activeRequest.helpers({
 
 		return (copy.length == 0);
 	},
+  // Checks if the request was a sub request
 	isSub : function(type) {
 		return (type == "sub");
 	},
+  // Checks if the request was a swap request
 	isSwap : function(type) {
 		return (type == "swap");
 	}
@@ -29,6 +33,7 @@ Template.activeRequest.helpers({
 
 
 Template.activeRequest.events({
+  // Removes the request if the user presses the cancel button
 	'click .btn-danger' : function(event) {
 		let notifID = event.currentTarget.id;
 	 	Notifications.remove({"_id" : notifID});

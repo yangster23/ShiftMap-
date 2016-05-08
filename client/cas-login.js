@@ -1,4 +1,3 @@
-
 Template.CasLogin.events({
   /*
    * Handle the click on the logout link.
@@ -24,7 +23,6 @@ Template.CasLogin.events({
       }
     };
     Meteor.loginWithCas([callback]);
-    // console.log('login success');
     return false;
   }
 });
