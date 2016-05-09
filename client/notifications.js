@@ -8,7 +8,7 @@ Template.notifications.helpers({
   // Checks if there are no notifications for a user
 	zeroNotification : function() {
 		let notifArray = getCurrentNotifications();
-		return (checkSeen(notifArray.length) == 0);
+		return checkSeen(notifArray).length == 0;
 	},
   // Checks if it is a sub notification
 	isSub : function(type) {
