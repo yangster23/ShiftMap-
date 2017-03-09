@@ -1,6 +1,6 @@
 <template name = "activeRequest">
 	<div class="well">
-		<center><h2 class="futura_header"> Pending Requests </h2></center>
+		<center><h2> Active Requests </h2></center>
 		{{#if zeroRequest}}
 			{{> noRequest}}
 		{{else}}
@@ -17,7 +17,7 @@
 </template>
 
 <template name = "noRequest">
-  You currently have no outstanding requests!
+You currently have no outstanding requests!
 </template>
 
 <template name = "subRequest">

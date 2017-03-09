@@ -5,7 +5,7 @@
 <template name="calendar">
     <div class="well">
       <div id="some-div">
-        <h1 id="calendar_title"><center><a href="#" data-toggle="popover" title="Description" data-content={{getGroupDescription}}>Calendar of {{getGroupHeader}}</a></center></h1>
+        <h1 id= "calendar_title"><center><a href="#" data-toggle="popover" title="Description" data-content={{getGroupDescription}}>Calendar of {{getGroupHeader}}</a></center></h1>
       </div>
       {{#if isCurrentEmployer}}
         {{>updateGroup}}
@@ -129,9 +129,9 @@
     </div>
     </li>
     <li class="groupList">
-    <a href='/notifications'> Notifications <span class="badge">{{getNotificationCount}}</span></a>
+    <a href='/notifications'> Notifications <span class="badge">{{getNotificationCount currentUser.profile.name}}</span></a>
     <div id="myDropdownGroup" class="dropdown-content">
-      <a href='/activeRequest'><span> Pending Requests </span></a>
+      <a href='/activeRequest'><span> Active Requests </span></a>
     </div>
     </li>
      {{> CasLogin }}

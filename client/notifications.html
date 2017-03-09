@@ -1,7 +1,7 @@
 <!-- if there are notifications, it lists them. If not, it shows that there are no notifications -->
 <template name = "notifications">
 	<div class="well">
-		<center><h2 class="futura_header"> Notifications </h2></center>
+		<center><h2> Notifications </h2></center>
 		{{#if zeroNotification}}
 				{{> noNotification}}
 		<!-- There is at least one notification to display -->
@@ -15,12 +15,6 @@
 						{{/if}}
 						{{#if isSwap type}}
 							{{> swapRequestResponse}}
-						{{/if}}
-						{{#if isCancelSub type}}
-							{{> cancelSubResponse}}
-						{{/if}}
-						{{#if isCancelSwap type}}
-							{{> cancelSwapResponse}}
 						{{/if}}
 					{{else}}
 						{{#if isSub type}}
@@ -47,12 +41,6 @@
 						{{#if isSwap type}}
 							{{> swapRequestResponse}}
 						{{/if}}
-						{{#if isCancelSub type}}
-							{{> cancelSubResponse}}
-						{{/if}}
-						{{#if isCancelSwap type}}
-							{{> cancelSwapResponse}}
-						{{/if}}
 					{{else}}
 						{{#if isSub type}}
 							{{> subNotification}}
@@ -64,28 +52,6 @@
 				{{/each}}
 			{{/if}}
 		{{/if}}
-	</div>
-</template>
-
-<template name = "cancelSubResponse">
-	<div id = "notificationlist">
-		<li>
-			{{getGroupName groupid}} Canceled Request: Sub between <b>{{idOfAccepter acceptID}}</b> and <b>{{idOfSender sender}}</b> for {{date}} {{startin}} - {{endin}} has been canceled
-			<button type = "button" id = {{_id}} class = "btn btn-danger">
-				OK
-			</button>
-		</li>
-	</div>
-</template>
-
-<template name = "cancelSwapResponse">
-	<div id = "notificationlist">
-		<li>
-			{{getGroupName groupid}} Canceled Request: Swap between <b>{{idOfAccepter acceptID}}</b> and <b>{{idOfSender sender}}</b> for {{date}} {{startin}} - {{endin}} with {{swapdate}} {{startout}} - {{endout}}
-			<button type = "button" id = {{_id}} class = "btn btn-danger">
-				OK
-			</button>
-		</li>
 	</div>
 </template>
 

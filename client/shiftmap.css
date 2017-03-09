@@ -376,6 +376,10 @@ li.listForm {
   margin: 20px 0;
 }
 
+/* full calendar */
+.fc-unthemed .fc-today {
+  background:white;
+}
 
 .popover {
       width: 140px;

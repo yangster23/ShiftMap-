@@ -1,19 +1,31 @@
 Packages Imported:
-atoy40:accounts-cas
-eternicode:bootstrap-datepicker
-ian:accounts-ui-bootstrap-3
+meteor-base
+mongo
 iron:router
-momentjs:moment
-random
-rzymek:fullcalendar
-spacebars
 twbs:boostrap
+random
+atoy40:accounts-cas
+
+Underlying data structures:
+// udocuments of the format {key:data type, ...}
+users: {_id: string, profile: {name: string}}
+
+// current is the default group to display
+Users: {_id: string, username: string, groups: [{groupid: string}], current: string}
+
+Groups: {_id: string, groupname: string, employers: [{userid: string}], users: [{userid: string}]}
+
+// we will have to split start and end time via ":"
+Shifts: {_id: string, day: int, month: string, start: string, end: string, users: [{userid: string}], groupid: string}
 
 
 Colors:
+Purple - Swapped out
 Pink - Waiting for Swap
 Green - In
-Translucent Green - Swapped out
+Yellow - Swapped in
 Red - Full
 Blue - Open
-Translucent Blue - Swapped in
+
+After accepting request:
+add an "acceptID" field containing the id of the user who accepted the request
