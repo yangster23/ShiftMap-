@@ -99,7 +99,6 @@
   setCalHeader: function() {
     return {
       left: 'prev,next today',
-      center: '',
       right: ''
     }
   },

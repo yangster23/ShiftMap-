@@ -8,7 +8,7 @@ Template.updateGroup.events({
     const text = target.text.value;
    
     // Insert an employer into the collection
-    if (text != "")
+    if (text.length > 0)
       addEmployerToGroup(idFromName(text), getCurrentGroupId());
 
     // Clear form
@@ -23,14 +23,14 @@ Template.updateGroup.events({
     let text = target.text.value;
    
     // Insert an employee into the collection
-    if (text != "")
+    if (text.length > 0) 
       addUserToGroup(idFromName(text), getCurrentGroupId());
     // Clear form
     target.text.value = '';
   },
 
   'submit .form-inline'(event) {
-
+    // Prevent default browser form submit
     event.preventDefault();
 
     let start = event.target.start.value;
@@ -52,14 +52,14 @@ Template.updateGroup.events({
 
   'click .btn btn-primary' (event) {
     Router.go('/');
-
   }
 });
 
-Template.updateGroup.rendered=function() {
+Template.updateGroup.rendered = function() {
   $('#datepicker').datepicker({
     dateFormat: "dd/mm/yyyy"
   });
+
 };
 
 Template.updateGroup.helpers({
@@ -110,7 +110,9 @@ Template.shift.events({
   },
 });
 
+
 var weekdays = {0: "Sunday", 1: "Monday", 2: "Tuesday", 3: "Wednesday", 4: "Thursday", 5: "Friday", 6: "Saturday"};
+
 Template.shift.helpers({
   displayShift: function () {
     let display = "Start: " + unformatTime(this.start);

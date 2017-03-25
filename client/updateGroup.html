@@ -1,6 +1,4 @@
 <template name="updateGroup">
-  
-
   <button type="button" class="btn btn-info btn-default" data-toggle="modal" data-target="#myModal" style="float: right">Update Group</button>
   <!-- Modal -->
   <div class="modal modal-fullscreen fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -16,7 +14,7 @@
         <div class="modal-body">
           <form class="new-employer">
             <div class="form-group">
-              <label for="inputEmployer">New Employer</label>
+              <label for="inputEmployer">Employers</label>
               <input type="text" class="form-control" name="text" id="employer" placeholder= "Type to add new employer">
             </div>
           </form>
@@ -24,78 +22,108 @@
           <table class = "table table-hover">
             <tbody>
               {{#each employers}}
-                <tr>{{> employer}}</tr>
+              <tr>{{> employer}}</tr>
               {{/each}}
             </tbody>
           </table>
 
           <form class="new-employee">
             <div class="form-group">
-              <label for="inputEmployee">New Employee</label>
+              <label for="inputEmployee">Employees</label>
               <input type="text" class="form-control" name="text" id="employee" placeholder= "Type to add new employee">
             </div>
           </form>
 
-          <table class = "table table-hover">
+          <table class="table table-hover">
             <tbody>
               {{#each employees}}
-                <tr>{{> employee}}</tr>
+              <tr>{{> employee}}</tr>
               {{/each}}
             </tbody>
           </table>  
 
           <form class="form-inline">
-            <div class="bigcontainer">
-              <div class="form-group">
-                <div id="startTime">
-                  <label class="sr-only" for="inputStartTime">Start</label>
-                  <input type="text" class="form-control" name="start" placeholder=" Start Time"/> 
-                </div>
-              </div>
-
-              <div class="form-group">
-                <div id="endTime">
-                  <label class="sr-only" for="inputEndTime">End</label>
-                  <input type="text" class="form-control" name="end" placeholder="End Time"/>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <div id="capacity">
-                  <label class="sr-only" for="inputCapacity">Capacity</label>
-                  <input type="text" class="form-control" name="capacity" placeholder="Capacity"/>
-                </div>
-              </div>
-               
-              <input type="text" class="form-control" id="datepicker" placeholder="Date: dd/mm/yyyy">
-             
-              <div class="checkbox">
-                <label>
-                  <input id="repeat" type="checkbox"> Repeat Weekly
-                </label>
-              </div>
-               
-              <br> <br>
-              <button type="submit" class="btn btn-default">Add Shift</button>
+            <div class="form-group">
+              <label class="control-label" for="formGroupInputLarge">Time:</label>
             </div>
-          </form>
-          <br>
-          
-          <table class = "table table-hover">
-            <tbody>
-              {{#each formShifts}}
-                <tr>{{> shift}}</tr>
-              {{/each}}
-            </tbody>
-          </table> 
-        </div>
+            <div class="form-group">
+              <select class="form-control" name="start">
+                <option value="3:00pm"> 3:00pm</option>
+                <option value="3:30pm"> 3:30pm</option>
+                <option value="4:00pm"> 4:00pm</option>
+                <option value="4:30pm"> 4:30pm</option>
+                <option value="5:00pm"> 5:00pm</option>
+                <option value="5:00pm"> 5:30pm</option>
+                <option value="6:00pm"> 6:00pm</option>
+                <option value="6:30pm"> 6:30pm</option>
+                <option value="7:00pm"> 7:00pm</option>
+                <option value="7:30pm"> 7:30pm</option>
+                <option value="8:00pm"> 8:00pm</option>
+                <option value="8:30pm"> 8:30pm</option>
+                <option value="9:00pm"> 9:00pm</option>
+                <option value="9:30pm"> 9:30pm</option>
+                <option value="10:00pm"> 10:00pm</option>
+                <option value="10:30pm"> 10:30pm</option>
+                <option value="11:00pm"> 11:00pm</option>
+              </select> 
+            </div>
+            <div class="form-group">
+              <p class="form-control-static">-</p>
+            </div>
+            <div class="form-group">
+             <select class="form-control" name="end">
+              <option value="4:00pm"> 4:00pm</option>
+              <option value="4:30pm"> 4:30pm</option>
+              <option value="5:00pm"> 5:00pm</option>
+              <option value="5:00pm"> 5:30pm</option>
+              <option value="6:00pm"> 6:00pm</option>
+              <option value="6:30pm"> 6:30pm</option>
+              <option value="7:00pm"> 7:00pm</option>
+              <option value="7:30pm"> 7:30pm</option>
+              <option value="8:00pm"> 8:00pm</option>
+              <option value="8:30pm"> 8:30pm</option>
+              <option value="9:00pm"> 9:00pm</option>
+              <option value="9:30pm"> 9:30pm</option>
+              <option value="10:00pm"> 10:00pm</option>
+              <option value="10:30pm"> 10:30pm</option>
+              <option value="11:00pm"> 11:00pm</option>
+            </select> 
+          </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-        </div>
+          <div class="form-group">
+            <input type="text" class="form-control" id="datepicker" placeholder="Date: dd/mm/yyyy">
+          </div>
+
+          <div class="form-group">
+            <div id="capacity">
+              <label class="sr-only" for="inputCapacity">Capacity</label>
+              <input type="text" class="form-control" name="capacity" placeholder="Capacity"/>
+            </div>
+          </div>
+
+          <div class="checkbox">
+            <label> <input id="repeat" type="checkbox"> Repeat Weekly </label>
+          </div>
+
+          <button type="submit" class="btn btn-default">Add Shift</button>
+        </form>
+        <br>
+
+        <table class = "table table-hover">
+          <tbody>
+            {{#each formShifts}}
+            <tr>{{> shift}}</tr>
+            {{/each}}
+          </tbody>
+        </table> 
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <template name="employer">

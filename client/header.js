@@ -1,6 +1,6 @@
 Template.Header.helpers({
   getGroups : function (netid) {
-    var user = Users.findOne({username: netid});
+    let user = Users.findOne({username: netid});
     // console.log(netid + ' added');
     let groupid = getCurrentGroupId();
     let groups = user.groups
@@ -32,7 +32,7 @@ Template.Header.helpers({
           setCurrentGroup(groupid);
         }
         else
-          return "No Current Groups"
+          return "No Current Groups";
       }
     }
       return Groups.findOne({_id: getCurrentGroupId()}).groupname; 
