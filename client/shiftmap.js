@@ -20,7 +20,7 @@
   },
   events: function () {
     var fc = $('.fc');
-    return function (start, end, tz, callback) {
+    return function (start, end, timezone, callback) {
       let user = Users.findOne({username: currentUser()});
       let userid = user._id;
       let currentGroup = user.current;

@@ -40,7 +40,7 @@ Template.updateGroup.events({
 
     let repeat = document.getElementById("repeat").checked;
 
-    var re = "^(0|1)?[0-9]:[0-5][0-9](am|pm)$";
+    let re = "^(0|1)?[0-9]:[0-5][0-9](am|pm)$";
 
     if (start.match(re) != null && end.match(re) != null && parseInt(capacity) > 0 && date != "") {
       addShift({"start": formatTime(start), "end": formatTime(end), "capacity": capacity, "date": date, "repeat": repeat}, getCurrentGroupId());
@@ -57,7 +57,7 @@ Template.updateGroup.events({
 
 Template.updateGroup.rendered = function() {
   $('#datepicker').datepicker({
-    dateFormat: "dd/mm/yyyy"
+    dateFormat: "dd/mm/yyyy",
   });
 
 };
