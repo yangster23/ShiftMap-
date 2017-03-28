@@ -3,84 +3,16 @@
 </head>
 
 <template name="calendar">
-    <div class="well">
-      <div id="some-div">
-        <h1 id= "calendar_title"><center><a href="#" data-toggle="popover" title="Description" data-content={{getGroupDescription}}>Calendar of {{getGroupHeader}}</a></center></h1>
-      </div>
-      {{#if isCurrentEmployer}}
-        {{>updateGroup}}
-        {{>deleteGroup}}
-      {{/if}}
-      {{> fullcalendar
-          class="mainCalendar"
-          defaultView='agendaWeek'
-          height="auto"
-          events=events
-          header=setCalHeader
-          eventClick=onEventClicked
-          eventRender=onEventRender
-          allDaySlot=false
-          minTime="08:00"
-          maxTime="24:00"
-          displayEventTime=true
-          timeFormat="h:mm"
-      }}
-
-      <div id = "popover-head" class="hide">
-        <b>Pick Your Action</b>
-      </div>
-      <div id = "popover-content1" class="hide">
-        <!-- for all these buttons we should add the respective button id's... Talk with danny and alex on how to implement this -->
-      </div>
-      <div id = "employer-popover-content1" class="hide">
-        <!-- for all these buttons we should add the respective button id's... Talk with danny and alex on how to implement this -->
-          Delete this shift permanently: <button id="deleteShift" class="btn btn-default" aria-label="Left Align">
-            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-      </div>
-
-      <!-- when it's full/you're in it you shouldn't be able to add it -->
-      <div id = "popover-content2" class="hide">
-        Drop shift: <button id="dropButton" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button><br>
-        Request swap: <button id="swapButton" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-random" aria-hidden="true"></span></button><br>
-        Request sub: <button id="subButton" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span></button>
-      </div>
-      <div id = "employer-popover-content2" class="hide">
-        Drop shift: <button id="dropButton" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button><br>
-        Request swap: <button id="swapButton" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-random" aria-hidden="true"></span></button><br>
-        Request sub: <button id="subButton" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-resize-vertical" aria-hidden="true"></span></button><br>
-        Delete this shift permanently: <button id="deleteShift" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-      </div>
-
-      <!-- when you're not in it, you shouldn't be able to drop it -->
-      <div id = "popover-content3" class="hide">
-        Enroll in shift: <button id="enrollButton" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button><br>
-      </div> 
-      <div id = "employer-popover-content3" class="hide">
-        Enroll in shift: <button id="enrollButton" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button><br>
-        Delete this shift permanently: <button id="deleteShift" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-      </div> 
-
-      <!-- if you swapped in or swapped out and there is more than one day left-->
-      <div id = "popover-content4" class="hide">
-        Cancel sub/swap: <button id="cancelButton" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button><br>
-      </div> 
-      <div id = "employer-popover-content4" class="hide">
-        Cancel sub/swap: <button id="cancelButton" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button><br>
-        Delete this shift permanently: <button id="deleteShift" class="btn btn-default" aria-label="Left Align">
-          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-      </div> 
+  <div class="well">
+    <h1 id= "calendar_title">
+      <center><a href="#" data-toggle="popover" title="Description" data-content={{getGroupDescription}}>Calendar of {{getGroupHeader}}</a></center>
+    </h1>
+    {{#if isCurrentEmployer}}
+      {{>updateGroup}}
+      {{>deleteGroup}}
+    {{/if}}
+    {{> addEditEventModal }}
+    <div id="events-calendar"></div>
   </div>
 </template>
 

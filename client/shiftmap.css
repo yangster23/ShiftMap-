@@ -1,16 +1,16 @@
 #header1 {
-    position: fixed; 
-    top: 480px; 
-    left: 0; 
-    width: 100%; 
+  position: fixed; 
+  top: 480px; 
+  left: 0; 
+  width: 100%; 
 }
 #header1 span { 
-    color: white; 
-    font: bold 30px/53px Helvetica, Sans-Serif; 
-    letter-spacing: -1px;  
-    background: rgb(0, 0, 0); /* fallback color */
-    background: rgba(0, 0, 0, 0.7);
-    padding: 10px; 
+  color: white; 
+  font: bold 30px/53px Helvetica, Sans-Serif; 
+  letter-spacing: -1px;  
+  background: rgb(0, 0, 0); /* fallback color */
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px; 
 }
 #header1 span.spacer {
   padding:0 5px;
@@ -27,33 +27,33 @@
 
 a:hover 
 {
-     color: black; 
-     text-decoration:none; 
-     cursor:pointer;  
+ color: black; 
+ text-decoration:none; 
+ cursor:pointer;  
 }
 
 a:active{
-color: black;
+  color: black;
 }
 
- a:link {
-color: black; 
-text-decoration: none;
+a:link {
+  color: black; 
+  text-decoration: none;
 }
 
 a:visited {
-color: black; 
-text-decoration: none;
+  color: black; 
+  text-decoration: none;
 }
 
 a:hover {
-color: black; 
-text-decoration: none;
+  color: black; 
+  text-decoration: none;
 }
 
 a:active {
-color: black; 
-text-decoration: none;
+  color: black; 
+  text-decoration: none;
 }
 
 
@@ -63,7 +63,7 @@ text-decoration: none;
 }
 
 #about_us {
-    font-family: 'Lato', sans-serif;
+  font-family: 'Lato', sans-serif;
 }
 
 #emptyGroupHeader {
@@ -75,29 +75,29 @@ text-decoration: none;
 
 #meet_team {
   font-family: 'Futura', sans-serif;
-      padding-bottom: 30px;
+  padding-bottom: 30px;
 }
 div.item {
-    vertical-align: top;
-    display: inline-block;
-    text-align: center;
+  vertical-align: top;
+  display: inline-block;
+  text-align: center;
 }
 img {
-    width: 220px;
-    height: 240px;
+  width: 220px;
+  height: 240px;
 }
 .caption {
-    font-family: 'Lato', sans-serif;
-    font-size: 150%;
-    display: block;
-    padding-top: 10px
+  font-family: 'Lato', sans-serif;
+  font-size: 150%;
+  display: block;
+  padding-top: 10px
 }
 body {
   background: url(/fall.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-    background-size: cover;
+  background-size: cover;
   z-index:1;
 }
 
@@ -136,7 +136,7 @@ li.listForm {
   font-family: 'Open Sans', sans-serif;
   font-size: 40px;
 }
-      
+
 #startTime {
   float:left;
   padding-right:20px;
@@ -298,12 +298,12 @@ li.listForm {
   -o-transition: color .25s;
   transition: color .25s;
 
-    background-color: #f96e5b;
-    color: white;
-    font-size: 14px;
-    border: none;
-    cursor: pointer;
-    padding-left: 0px;
+  background-color: #f96e5b;
+  color: white;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  padding-left: 0px;
 }
 
 /* Dropdown Button */
@@ -322,12 +322,12 @@ li.listForm {
   -o-transition: color .25s;
   transition: color .25s;
 
-    background-color: #f96e5b;
-    color: white;
-    font-size: 14px;
-    border: none;
-    cursor: pointer;
-    padding-left: 0px;
+  background-color: #f96e5b;
+  color: white;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  padding-left: 0px;
 }
 
 /* Dropdown button on hover & focus */
@@ -337,17 +337,17 @@ li.listForm {
 
 /* The container <div> - needed to position the dropdown content */
 .last {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f96e5b;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    padding-right: 10px;
+  display: none;
+  position: absolute;
+  background-color: #f96e5b;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding-right: 10px;
 }
 
 /* Links inside the dropdown */
@@ -376,26 +376,21 @@ li.listForm {
   margin: 20px 0;
 }
 
-/* full calendar */
-.fc-unthemed .fc-today {
-  background:white;
-}
-
 .popover {
-      width: 140px;
-  }
+  width: 140px;
+}
 /* Popover Header */
 .popover-title {
-    background-color: #F75D59; 
-    color: #FFFFFF; 
-    font-size: 15px;
-    text-align:center;
+  background-color: #F75D59; 
+  color: #FFFFFF; 
+  font-size: 15px;
+  text-align:center;
 }
 /* Popover Body */
 .popover-content {
-    font-size: 12px;
-    background-color: coral;
-    color: #FFFFFF;
+  font-size: 12px;
+  background-color: coral;
+  color: #FFFFFF;
 }
 
 .datepicker table {
@@ -414,5 +409,58 @@ li.listForm {
 /* Add transparency to events for swapped in or swapped out*/
 .transparent-event {
   opacity:0.6;
+}
+
+.fc-event-container {
+  padding: 5px !important;
+}
+
+.fc-event {
+  padding: 5px 10px;
+  border-color: #ddd;
+  background: #fff !important;
+}
+
+.fc-event .fc-content {
+  color: #444;
+}
+
+.fc-event h4, h5 {
+  margin: 0;
+  font-weight: normal;
+}
+
+.fc-event h4 {
+  color: #666;
+  font-size: 13px;
+  line-height: 18px;
+  white-space: normal;
+}
+
+.fc-event h5 {
+  color: #888;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.fc-event .guest-count {
+  margin: 5px 0;
+}
+
+.fc-event p[class^="type-"] {
+  margin: 0;
+  color: red;
+}
+
+.fc-event p[class="type-Corporate"] {
+  color: red;
+}
+
+.fc-event p[class="type-Wedding"] {
+  color: green;
+}
+
+.fc-event p[class="type-Birthday"] {
+  color: orange;
 }
 

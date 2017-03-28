@@ -1,11 +1,20 @@
- /* used for closing popovers appropriately*/
- prevEvent = null;
- eventCounter = 0;
+// If the current date and time today is after the passed date, we respond with 
+// true meaning the date in question has already past. 
+let isPast = (date) => {
+  let today = moment().format();
+  return moment(today).isAfter(date);
+};
 
- Template.calendar.helpers({
+Template.calendar.onCreated( () => {
+  let template = Template.instance();
+  // connects the “real” collection with the client’s version, and constantly keeps it up to date with the latest information on the server.
+  template.subscribe('events');
+});
+
+Template.calendar.helpers({
   getGroupHeader: function () {
     let currentGroup = getCurrentGroupId();
-    console.log(currentGroup);
+    // console.log(currentGroup);
     if (currentGroup == null)
       return "No Groups";
     return Groups.findOne({_id: currentGroup}).groupname; 
@@ -17,227 +26,85 @@
     let userid = currentUserId();
     let employers = Groups.findOne({_id: getCurrentGroupId()}).employers;
     return indexUser(userid,employers) >= 0;
-  },
-  events: function () {
-    var fc = $('.fc');
-    return function (start, end, timezone, callback) {
-      let user = Users.findOne({username: currentUser()});
-      let userid = user._id;
-      let currentGroup = user.current;
-      var events;
-      var secondEvent;
-
-      if (currentGroup == undefined) {
-        currentGroup = user.groups[0].groupid;
-        if (currentGroup == undefined) {
-          events = [];
-        }
-        setCurrentGroup(currentGroup);
-      }
-      console.log("id: " + currentGroup);
-
-      events = Shifts.find({groupid: currentGroup}).map(function (it) {
-          var starttime = String(it.start)
-          var endtime = String(it.end)
-          var id = currentUserId();
-          var colVal = "";
-          var classVal = "";
-
-          if (indexUser(id, it.users) >= 0) {
-            //you're in it
-            if (isSwappedOut(userid, it.swaps, findDate(it._id))) {
-              colVal = "green";
-              classVal = "transparent-event";
-            }
-            else if (isWaitingSwap(userid, currentGroup, it._id, findDate(it._id))) {
-              colVal = "pink";
-            }
-            else //you're in it with no swaps
-              colVal = "green";
-          } 
-          else {
-            //you're not in it
-            if (isSwappedIn(userid, it.swaps, findDate(it._id))) {
-              colVal = "blue";
-              classVal = "transparent-event";
-            }
-            else if (isShiftFull(it._id)){
-              colVal = "red";
-            }
-            else
-              colVal = "blue"; 
-          }
-
-          if (it.date) {
-            return {
-              start: formatDate(it.date) + "T" + starttime,
-              end: formatDate(it.date) + "T" + endtime,
-              _id: it._id,
-              color: colVal,
-              className: classVal
-            };
-          }
-          else {
-            return {
-              start: "2016-04-26T" + starttime,
-              end: "2016-04-26T" + endtime,
-              _id: it._id,
-              color: colVal,
-              dow: [parseInt(it.weekday)],
-              className: classVal
-            };
-          }
-
-      });
-      callback(events);
-      callback(secondEvent);
-      fc.fullCalendar('refetchEvents');
-      console.log("calling rerender");
-      fc.fullCalendar('rerenderEvents');
-    };
-  },
-  setCalHeader: function() {
-    return {
-      left: 'prev,next today',
-      right: ''
-    }
-  },
-  getCurrentGroupId: function() {
-    return Users.findOne({_id: currentUserId()}).current;
-  },
-  onEventClicked: function() {
-    var fc = $('.fc');
-    var user = Users.findOne({username: currentUser()});
-    var userid = user._id;
-    let currentGroup = user.current;
-    var group = Groups.findOne({_id: currentGroup});
-    var employers = group.employers;
-    return function(calEvent, jsEvent, view) {
-        var buttonid = calEvent._id;
-        lastshiftid = buttonid;
-        var shift = Shifts.findOne({_id: lastshiftid});
-        if (swapstatus) {
-          //notifyswap(subout, groupid, shiftid, dateOut, swapid, dateIn)
-            //check if there is already an array of notification
-          // add field swap into the shift {subin:_id, subout:_id, date:x}
-          if (lastshiftid == swapid) {
-            swapstatus = false;
-            alert("You cannot swap with the same shift");
-          }
-          else {
-            var swapMoment = findDate(swapid);
-            var lastMoment = findDate(lastshiftid)
-            
-            notifySwap(currentGroup, userid, swapid, swapMoment, lastshiftid, lastMoment);
-            swapstatus = false;
-            alert("You will be notified if anyone accepts your request");
-          }
-        } 
-        else {
-        if (indexUser(userid, employers) == -1) {
-          $(this).popover({
-              html: true,
-              placement: 'right',
-              title: function() {
-                  return $("#popover-head").html();
-              },
-              container: 'body',
-              content: function() {          
-                  if (isUserInShift(userid, lastshiftid)) {
-                    if (isSwappedOut(userid, shift.swaps, findDate(lastshiftid))) {
-                      if (greaterOneDay("out", userid, shift.swaps))
-                        return $("#popover-content4").html();
-                      else return $("#popover-content1").html();
-                    }
-                    else return $("#popover-content2").html();
-                  }
-                  else {
-                    if (isSwappedIn(userid, shift.swaps, findDate(lastshiftid))) {
-                      if (greaterOneDay("in", userid, shift.swaps))
-                        return $("#popover-content4").html();
-                      else return $("#popover-content1").html();
-                    }
-                    else if (isShiftFull(lastshiftid)) {
-                      return $("#popover-content1").html();
-                    }
-                    else return $("#popover-content3").html();
-                  }
-                return $("#popover-content1").html();
-              }
-          });
-        }
-        else {
-          $(this).popover({
-              html: true,
-              placement: 'right',
-              title: function() {
-                  return $("#popover-head").html();
-              },
-              container: 'body',
-              content: function() {
-                  if (isUserInShift(userid, lastshiftid)) {
-                    if (isSwappedOut(userid, shift.swaps, findDate(lastshiftid))) {
-                      if (greaterOneDay("out", userid, shift.swaps))
-                        return $("#employer-popover-content4").html();
-                      else return $("#employer-popover-content1").html();
-                    }
-                    else return $("#employer-popover-content2").html();
-                  }
-                  else {
-                    if (isSwappedIn(userid, shift.swaps, findDate(lastshiftid))) {
-                      if (greaterOneDay("in", userid, shift.swaps))
-                        return $("#employer-popover-content4").html();
-                      else return $("#employer-popover-content1").html(); 
-                    }
-                    else if (isShiftFull(lastshiftid)) {
-                      return $("#employer-popover-content1").html();
-                    }
-                    else
-                      return $("#employer-popover-content3").html();
-                  }
-                return $("#employer-popover-content1").html();
-              }
-          });
-        }
-        if (prevEvent == calEvent) {
-          if (eventCounter == 0) {
-            $(this).popover('show');
-            eventCounter = 1;
-          }
-          else {
-            $(this).popover('destroy');
-            eventCounter = 0;
-          }
-        }
-        else {  
-          $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").not(this).popover('destroy');
-          $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").not(this).popover('destroy');
-          $(this).popover('show');
-          eventCounter = 1;
-        }
-        prevEvent = calEvent;
-      }
-    }
   }
-});
+}); 
 
-  Template.calendar.rendered = function () {
-    // find id of full calendar
-    var fc = this.$('.fc');
+// The calendar is rendered via FullCalendar API. 
+Template.calendar.onRendered( () => {
+  $( '#events-calendar' ).fullCalendar({
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'agendaWeek,month'
+    },
+    events(start, end, timezone, callback) {
+      // the .fetch() method converts the result from a MongoDB cursor to a plain array. 
+      let data = Events.find().fetch().map((event) => {
+        event.editable = !isPast(event.start);
+        return event;
+      });
+      console.log(data);
 
-      $(document).ready(function(){
-      $('[data-toggle="popover"]').popover();   
+      // Once data is available, "update" the calendar. 
+      if (data) {
+        callback(data);
+      }
+    },
+
+    // We get two arguments event—the actual event item on the calendar and the element where the item is being rendered (the data square) 
+    // as a jQuery element. To customize the contents of our event, we make a call on our calendar square to .find() 
+    // the <div></div> with the class .fc-content. Once we have it, we make a call to set its inner HTML with jQuery's .html() method
+    eventRender(event, element) {
+      element.find( '.fc-content' ).html(
+       `<h4>${ event.title }</h4>
+       <p class="guest-count">${ event.guests } Guests</p>
+       <p class="type-${ event.type }">#${ event.type }</p>
+       `
+       );
+    },
+    eventDrop( event, delta, revert ) {
+      let date = event.start.format();
+      if ( !isPast( date ) ) {
+        let update = {
+          _id: event._id,
+          start: date,
+          end: date
+        };
+        Meteor.call( 'editEvent', update, ( error ) => {
+          if ( error ) {
+            Bert.alert( error.reason, 'danger', 'growl-bottom-right');
+          }
+        });
+      } else {
+        revert();
+        Bert.alert( 'Sorry, you can\'t move items to the past!', 'danger', 'growl-bottom-right' );
+      }
+    },
+    // Because we're dealing with an external template that we need to "toggle" the state of, here, we're using a Session variable to store that state. 
+    // We do this in two ways. First, for both event and day clicks, we pass an object with a type property letting us know whether we're adding an event or editing an event.
+    // whenever we click on the actual day square in the calendar
+    dayClick( date ) {
+      Session.set( 'eventModal', { type: 'add', date: date.format() } ); //  passing date property formatted as an ISO8601 date string noting the day of the calendar that was clicked
+      $( '#add-edit-event-modal' ).modal( 'show' );
+    },
+    // whenever we click directly on an event.
+    eventClick( event ) {
+      Session.set( 'eventModal', { type: 'edit', event: event._id } ); // we simply pass the _id property of the event. 
+      $( '#add-edit-event-modal' ).modal( 'show' );
+    }
   });
-    //
-    this.autorun(function () {
-        //1) trigger event re-rendering when the collection is changed in any way
-        //2) find all, because we've already subscribed to a specific range
-        Shifts.find();
-        fc.fullCalendar('refetchEvents');
-    });
-    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end']").popover('destroy');
-    $("[class='fc-time-grid-event fc-v-event fc-event fc-start fc-end transparent-event']").not(this).popover('destroy');
 
-  };
+  /* 
+    Whenever our collection updates, the refetchEvents method being called on our
+    calendar element here will re-run the events() method on our FullCalendar 
+    instance and repopulate the calendar. If we look at the events() method's 
+    callback() method, we can see how this works. When refetchEvents fires, 
+    the method is called, our data is fetched, and only when we have some result, 
+    we tell the calendar to update with callback(data);.
+  */ 
+  Tracker.autorun( () => {
+    Events.find().fetch();
+    $( '#events-calendar' ).fullCalendar( 'refetchEvents' );
+  });
 
- 
+});
