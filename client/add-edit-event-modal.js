@@ -4,7 +4,7 @@ let closeModal = () => {
 };
 
 Template.addEditEventModal.helpers({
-	//  This allows us to control what elements are displayed in the template based on the passed type
+	// Using eventModal Session variable's type property and testing if it equals the type value passed to our helper like {{#if modalType 'edit'}}
 	modalType(type) {
 		let eventModal = Session.get( 'eventModal' );
 		if ( eventModal ) {
@@ -44,7 +44,6 @@ Template.addEditEventModal.events({
 		let eventModal = Session.get('eventModal'),
 		submitType = eventModal.type === 'edit' ? 'editEvent' : 'addEvent',
 		eventItem  = {
-			title: template.find( '[name="title"]' ).value,
 			start: template.find( '[name="start"]' ).value,
 			end: template.find( '[name="end"]' ).value,
 			type: template.find( '[name="type"] option:selected' ).value,
@@ -52,7 +51,7 @@ Template.addEditEventModal.events({
 		};
 
 		if ( submitType === 'editEvent' ) {
-			eventItem._id   = eventModal.event;
+			eventItem._id = eventModal.event;
 		}
 
 		Meteor.call(submitType, eventItem, ( error ) => {

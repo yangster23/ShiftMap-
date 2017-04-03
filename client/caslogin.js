@@ -1,4 +1,3 @@
-
 Template.CasLogin.events({
   /*
    * Handle the click on the logout link.

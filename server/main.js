@@ -1,4 +1,3 @@
-
 Groups.allow({
   'update': function() {return true;},
   'insert': function() {return true;},
@@ -11,12 +10,15 @@ Users.allow({
   'remove': function() {return true;}
 });
 
+/*
 Shifts.allow({
   'update': function() {return true;},
   'insert': function() {return true;},
   'remove': function() {return true;
   }
 });
+
+*/ 
 
 Notifications.allow({
   'update': function() {return true;},
